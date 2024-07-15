@@ -25,6 +25,7 @@ def main():
     """ call this as a lib
     """
     print("Hello from imio.scan-helpers in main.py")
+    input("Press Enter to exit...")
 
 
 if __name__ == "__main__":
