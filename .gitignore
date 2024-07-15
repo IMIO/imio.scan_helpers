@@ -1,5 +1,7 @@
 active
 bin/
+build/
+dist/
 doc/
 .idea/
 lib/
