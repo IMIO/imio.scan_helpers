@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the imio.scan-helpers distribution (https://github.com/IMIO/imio.scan-helpers).
+# This file is part of the imio.scan_helpers distribution (https://github.com/IMIO/imio.scan_helpers).
 # Copyright (c) 2023 IMIO
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,22 +17,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from os import path
-
+from utils import get_version
+from utils import stop
+import argparse
+import os
 import sys
 
 
-BUNDLE_DIR = path.dirname(__file__)
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--version", action="store_true", dest="version", help="Show version")
+ns = parser.parse_args()
+if ns.version:
+    stop("imio.scan_helpers version {}".format(get_version()), False)
+stop("Hello from imio.scan_helpers in main.py")
 
-
-def get_version():
-    with open('{}/version.txt'.format(BUNDLE_DIR), 'r') as file:
-        return file.readline().strip()
-
-
-def stop(msg="", intup=True):
-    if msg:
-        print(msg)
-    if intup:
-        input("Press Enter to exit...")
-    sys.exit(0)

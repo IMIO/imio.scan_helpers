@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['imio/scan-helpers/main.py'],
-    pathex=['imio/scan-helpers'],
+    ['imio/scan_helpers/main.py'],
+    pathex=['imio/scan_helpers'],
     binaries=[],
-    datas=[("imio/scan-helpers/version.txt", ".")],
+    datas=[("imio/scan_helpers/version.txt", ".")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

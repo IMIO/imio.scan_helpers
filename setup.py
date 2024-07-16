@@ -4,12 +4,12 @@ from setuptools import setup, find_packages
 
 
 def get_version():
-    with open('imio/scan-helpers/version.txt', 'r') as file:
+    with open('imio/scan_helpers/version.txt', 'r') as file:
         return file.readline().strip()
 
 
 setup(
-    name='imio.scan-helpers',
+    name='imio.scan_helpers',
     version=get_version(),
     description='Various script files to handle local scan tool',
     long_description=open('README.md').read(),
@@ -17,8 +17,8 @@ setup(
     author='Stephan Geulette (IMIO)',
     author_email='support@imio.be',
     project_urls={
-        "PyPI": "https://pypi.python.org/pypi/imio.scan-helpers",
-        "Source": "https://github.com/IMIO/imio.scan-helpers",
+        "PyPI": "https://pypi.python.org/pypi/imio.scan_helpers",
+        "Source": "https://github.com/IMIO/imio.scan_helpers",
     },
     license='GPL version 3',
     keywords='Scan Windows',

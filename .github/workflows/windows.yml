@@ -65,7 +65,7 @@ jobs:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #      with:
 #        upload_url: ${{ steps.create_release.outputs.upload_url }}
-#        asset_path: imio\scan-helpers\dist\main-win64-${{ steps.release.outputs.release }}.exe
+#        asset_path: imio\scan_helpers\dist\main-win64-${{ steps.release.outputs.release }}.exe
 #        asset_name: main-win64-${{ steps.release.outputs.release }}.exe
 #        asset_content_type: application/exe
 #    - name: Upload Release Asset
@@ -76,6 +76,6 @@ jobs:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #      with:
 #        upload_url: ${{ steps.create_tag.outputs.upload_url }}
-#        asset_path: imio\scan-helpers\dist\main-win64-${{ steps.release.outputs.release }}.exe
+#        asset_path: imio\scan_helpers\dist\main-win64-${{ steps.release.outputs.release }}.exe
 #        asset_name: main-win64-${{ steps.release.outputs.release }}.exe
 #        asset_content_type: application/exe

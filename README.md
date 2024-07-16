@@ -1,4 +1,4 @@
-# imio.scan-helpers
+# imio.scan_helpers
 Various script files to handle local scan tool
 
 ## Installation
