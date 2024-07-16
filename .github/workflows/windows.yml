@@ -25,8 +25,7 @@ jobs:
             echo "release=$Env:TAG" >> $GITHUB_OUTPUT
             echo "create_tag=true" >> $GITHUB_OUTPUT
         }
-        echo "${release}"
-        echo "${create_tag}"
+        echo "output:${$GITHUB_OUTPUT}"
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
