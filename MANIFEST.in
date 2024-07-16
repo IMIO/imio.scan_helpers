@@ -1,0 +1,3 @@
+include *.spec
+include *.txt
+recursive-include imio *.txt
