@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import shutil
 
 
 a = Analysis(
@@ -42,3 +43,7 @@ coll = COLLECT(
     upx_exclude=[],
     name='imio-scan-helpers',
 )
+
+# Archive everything into a zip file
+print('Creating zip file')
+shutil.make_archive('dist/imio-scan-helpers', 'zip', 'dist/imio-scan-helpers')
