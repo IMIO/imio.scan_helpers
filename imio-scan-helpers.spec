@@ -1,5 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
+import argparse
 import shutil
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-r", "--release", dest="release", help="release to include in generated zip file")
+ns = parser.parse_args()
 
 
 a = Analysis(
@@ -45,5 +50,9 @@ coll = COLLECT(
 )
 
 # Archive everything into a zip file
-print('Creating zip file')
-shutil.make_archive('dist/imio-scan-helpers', 'zip', 'dist/imio-scan-helpers')
+if ns.release is None:
+    zip_name = 'dist/imio-scan-helpers'
+else:
+    zip_name = 'dist/imio-scan-helpers-{}'.format(ns.release)
+print('Creating zip file {}.zip'.format(zip_name))
+shutil.make_archive(zip_name, 'zip', 'dist/imio-scan-helpers')
