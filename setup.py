@@ -1,11 +1,8 @@
 # setup.py
 import os
-from setuptools import setup, find_packages
-
-
-def get_version():
-    with open('imio/scan_helpers/version.txt', 'r') as file:
-        return file.readline().strip()
+from imio.scan_helpers.utils import get_version
+from setuptools import find_packages
+from setuptools import setup
 
 
 setup(
