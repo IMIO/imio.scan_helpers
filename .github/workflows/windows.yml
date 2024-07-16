@@ -53,7 +53,7 @@ jobs:
         draft: false
         prerelease: true
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.RELEASE }}.zip
+        artifacts: dist\imio-scan-helpers-${{ steps.release.outputs.RELEASE }}.zip
         artifactContentType: application/zip
     - name: Create Tag
       id: create_tag
@@ -64,5 +64,5 @@ jobs:
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.RELEASE }}.zip
+        artifacts: dist\imio-scan-helpers-${{ steps.release.outputs.RELEASE }}.zip
         artifactContentType: application/zip
