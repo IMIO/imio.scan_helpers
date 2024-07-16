@@ -36,46 +36,28 @@ jobs:
 #        pip install pytest
     - name: Build exe
       run: |
-        pyinstaller.exe imio-scan-helpers.spec
-#    - name: Create Release
-#      id: create_release
-#      if: steps.release.outputs.create_tag == 'false'
-#      uses: ncipollo/release-action@v1.14.0
-#      with:
-#        tag: ${{ steps.release.outputs.release }}
-#        name: Prerelease ${{ steps.release.outputs.release }}
-#        commit: ${{ github.base_href }}
-#        draft: false
-#        prerelease: true
-#        token: ${{ secrets.GITHUB_TOKEN }}
-#    - name: Create Tag
-#      id: create_tag
-#      if: steps.release.outputs.create_tag == 'true'
-#      uses: ncipollo/release-action@v1.12.0
-#      with:
-#        tag: ${{ steps.release.outputs.release }}
-#        draft: false
-#        prerelease: false
-#        token: ${{ secrets.GITHUB_TOKEN }}
-#    - name: Upload Release Asset
-#      id: upload-release-asset
-#      if: steps.release.outputs.create_tag == 'false'
-#      uses: actions/upload-release-asset@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        upload_url: ${{ steps.create_release.outputs.upload_url }}
-#        asset_path: imio\scan_helpers\dist\main-win64-${{ steps.release.outputs.release }}.exe
-#        asset_name: main-win64-${{ steps.release.outputs.release }}.exe
-#        asset_content_type: application/exe
-#    - name: Upload Release Asset
-#      id: upload-tag-asset
-#      if: steps.release.outputs.create_tag == 'true'
-#      uses: actions/upload-release-asset@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        upload_url: ${{ steps.create_tag.outputs.upload_url }}
-#        asset_path: imio\scan_helpers\dist\main-win64-${{ steps.release.outputs.release }}.exe
-#        asset_name: main-win64-${{ steps.release.outputs.release }}.exe
-#        asset_content_type: application/exe
+        pyinstaller.exe imio-scan-helpers.spec -- -r ${{ steps.release.outputs.release }}
+    - name: Create Release
+      id: create_release
+      if: steps.release.outputs.create_tag == 'false'
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ steps.release.outputs.release }}
+        name: Prerelease ${{ steps.release.outputs.release }}
+        commit: ${{ github.base_href }}
+        draft: false
+        prerelease: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.release }}.zip
+        artifactContentType: application/zip
+    - name: Create Tag
+      id: create_tag
+      if: steps.release.outputs.create_tag == 'true'
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ steps.release.outputs.release }}
+        draft: false
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.release }}.zip
+        artifactContentType: application/zip
