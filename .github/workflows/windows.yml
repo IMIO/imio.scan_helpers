@@ -18,12 +18,12 @@ jobs:
         if ($env:TAG -eq '') {
             $Env:RELEASE = "$ENV:BRANCH_NAME-${{ github.run_number }}"
             $Env:RELEASE = $Env:RELEASE -replace "/", "_"
-            echo "release=$Env:RELEASE" >> $GITHUB_OUTPUT
-            echo "create_tag=false" >> $GITHUB_OUTPUT
+            echo "RELEASE=$Env:RELEASE" >> $GITHUB_OUTPUT
+            echo "CREATE_TAG=false" >> $GITHUB_OUTPUT
         }
         else {
-            echo "release=$Env:TAG" >> $GITHUB_OUTPUT
-            echo "create_tag=true" >> $GITHUB_OUTPUT
+            echo "RELEASE=$Env:TAG" >> $GITHUB_OUTPUT
+            echo "CREATE_TAG=true" >> $GITHUB_OUTPUT
         }
         echo "output:${$GITHUB_OUTPUT}"
     - name: Set up Python
@@ -36,28 +36,29 @@ jobs:
 #        pip install pytest
     - name: Build exe
       run: |
-        pyinstaller.exe imio-scan-helpers.spec -- -r ${{ steps.release.outputs.release }}
+        echo "release=${{ steps.release.outputs.RELEASE }}"
+        pyinstaller.exe imio-scan-helpers.spec -- -r ${{ steps.release.outputs.RELEASE }}
     - name: Create Release
       id: create_release
-      if: steps.release.outputs.create_tag == 'false'
+      if: steps.release.outputs.CREATE_TAG == 'false'
       uses: ncipollo/release-action@v1
       with:
-        tag: ${{ steps.release.outputs.release }}
-        name: Prerelease ${{ steps.release.outputs.release }}
+        tag: ${{ steps.release.outputs.RELEASE }}
+        name: Prerelease ${{ steps.release.outputs.RELEASE }}
         commit: ${{ github.base_href }}
         draft: false
         prerelease: true
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.release }}.zip
+        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.RELEASE }}.zip
         artifactContentType: application/zip
     - name: Create Tag
       id: create_tag
-      if: steps.release.outputs.create_tag == 'true'
+      if: steps.release.outputs.CREATE_TAG == 'true'
       uses: ncipollo/release-action@v1
       with:
-        tag: ${{ steps.release.outputs.release }}
+        tag: ${{ steps.release.outputs.RELEASE }}
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.release }}.zip
+        artifacts: imio\scan_helpers\dist\imio-scan-helpers-${{ steps.release.outputs.RELEASE }}.zip
         artifactContentType: application/zip
