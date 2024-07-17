@@ -27,6 +27,8 @@ from utils import unzip_file
 
 import argparse
 import os
+import subprocess
+import sys
 
 
 def check_for_updates():
@@ -43,12 +45,25 @@ def check_for_updates():
         download_update(download_url, download_path)
         print(f"Unzipping {download_path} to {download_dir_path}")
         unzip_file(download_path, download_dir_path)
-        print(f"Copying files from {download_dir_path} to {get_bundle_dir()}")
-        copy_files(download_dir_path, get_bundle_dir())
-        # print("Update applied, restarting application...")
-        # restart_application()
-    else:
-        print("You already have the latest version.")
+        bundle_dir = get_bundle_dir()
+        print(f"Copying files from {download_dir_path} to {bundle_dir}")
+        copy_files(download_dir_path, bundle_dir)
+        if False and current_version == get_current_version():
+            print(f"Updated failed: version is always {current_version}")
+        else:
+            print("Update applied, restarting application without update")
+            try:
+                if sys.executable.endswith("/python"):  # dev mode
+                    print("This script has been run with python")
+                    python = sys.executable
+                    os.execl(python, python, sys.argv[0], "-v")
+                else:
+                    print(f"This script is {sys.argv[0]}")
+                    subprocess.Popen(sys.argv[0], "-nu", cwd=bundle_dir, shell=True)
+            except Exception as e:
+                stop(f"Error while restarting: {e}")
+        return False
+    return True
 
 
 # Argument parsing
@@ -58,9 +73,13 @@ parser.add_argument("-nu", "--no-update", action="store_true", dest="no_update",
 parser.add_argument("-r", "--release", dest="release", help="Get this release")
 ns = parser.parse_args()
 
+go_on = True
+
 if ns.version:
     stop("imio.scan_helpers version {}".format(get_current_version()), False)
 if not ns.no_update:
-    check_for_updates()
-# will restore some files
-pass
+    go_on = check_for_updates()
+
+if go_on:
+    # will do something
+    print("Doing something after update")

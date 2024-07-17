@@ -34,8 +34,8 @@ if os.path.basename(BUNDLE_DIR) == INTERNAL_DIR:
 
 def copy_files(src_dir, dest_dir):
     for item in os.listdir(src_dir):
-        if item.startswith(BUNDLE_NAME) and item.endswith(".zip"):
-            continue
+        # if item.startswith(f"{BUNDLE_NAME}-") and item.endswith(".zip"):
+        #     continue
         s = os.path.join(src_dir, item)
         d = os.path.join(dest_dir, item)
         if os.path.isdir(s):
@@ -119,3 +119,4 @@ def stop(msg="", intup=True):
 def unzip_file(zip_path, extract_to):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_to)
+    os.remove(zip_path)
