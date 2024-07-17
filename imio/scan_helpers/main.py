@@ -16,11 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from utils import copy_files
 from utils import download_update
+from utils import get_bundle_dir
 from utils import get_download_dir_path
 from utils import get_latest_release_version
 from utils import get_current_version
 from utils import stop
+from utils import unzip_file
 
 import argparse
 import os
@@ -38,8 +41,10 @@ def check_for_updates():
         download_path = os.path.join(download_dir_path, download_url.split("/")[-1])
         print(f"Downloading {download_url} to {download_path}")
         download_update(download_url, download_path)
-        # unzip_file(download_path, DOWNLOAD_DIR)
-        # update_files(DOWNLOAD_DIR, os.path.dirname(os.path.abspath(__file__)))
+        print(f"Unzipping {download_path} to {download_dir_path}")
+        unzip_file(download_path, download_dir_path)
+        print(f"Copying files from {download_dir_path} to {get_bundle_dir()}")
+        copy_files(download_dir_path, get_bundle_dir())
         # print("Update applied, restarting application...")
         # restart_application()
     else:

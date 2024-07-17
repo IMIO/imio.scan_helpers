@@ -19,15 +19,31 @@ from config import BUNDLE_NAME
 from config import DOWNLOAD_DIR
 from config import GITHUB_REPO
 from config import INTERNAL_DIR
-from os import path
 
+import os
 import requests
+import shutil
 import sys
+import zipfile
 
 
-BUNDLE_DIR = path.dirname(__file__)
-if path.basename(BUNDLE_DIR) == INTERNAL_DIR:
-    BUNDLE_DIR = path.dirname(BUNDLE_DIR)
+BUNDLE_DIR = os.path.dirname(__file__)
+if os.path.basename(BUNDLE_DIR) == INTERNAL_DIR:
+    BUNDLE_DIR = os.path.dirname(BUNDLE_DIR)
+
+
+def copy_files(src_dir, dest_dir):
+    for item in os.listdir(src_dir):
+        if item.startswith(BUNDLE_NAME) and item.endswith(".zip"):
+            continue
+        s = os.path.join(src_dir, item)
+        d = os.path.join(dest_dir, item)
+        if os.path.isdir(s):
+            if os.path.exists(d):
+                shutil.rmtree(d)
+            shutil.copytree(s, d)
+        else:
+            shutil.copy2(s, d)
 
 
 def download_update(url, download_path):
@@ -39,27 +55,30 @@ def download_update(url, download_path):
             file.write(chunk)
 
 
+def get_bundle_dir():
+    if os.path.exists(os.path.join(BUNDLE_DIR, INTERNAL_DIR)):
+        return BUNDLE_DIR
+    else:  # dev mode
+        root_dir = os.path.dirname(os.path.dirname(BUNDLE_DIR))
+        if os.path.exists(os.path.join(root_dir, "dist", BUNDLE_NAME)):
+            return os.path.join(root_dir, "dist", BUNDLE_NAME)
+        elif os.path.exists(os.path.join(root_dir, "dist")):
+            return os.path.join(root_dir, "dist")
+        return root_dir
+
+
 def get_download_dir_path():
     # maybe use tempdir
     # temp_dir = tempfile.gettempdir()
-    print(f"BUNDLE_DIR {BUNDLE_DIR}")
-    if path.exists(path.join(BUNDLE_DIR, INTERNAL_DIR)):
-        return path.join(BUNDLE_DIR, DOWNLOAD_DIR)
-    else:  # dev mode
-        root_dir = path.dirname(path.dirname(BUNDLE_DIR))
-        if path.exists(path.join(root_dir, "dist", BUNDLE_NAME)):
-            return path.join(root_dir, "dist", BUNDLE_NAME, DOWNLOAD_DIR)
-        elif path.exists(path.join(root_dir, "dist")):
-            return path.join(root_dir, "dist", DOWNLOAD_DIR)
-        return root_dir
+    return os.path.join(get_bundle_dir(), DOWNLOAD_DIR)
 
 
 def get_current_version():
     """Get current version"""
-    if path.exists(path.join(BUNDLE_DIR, INTERNAL_DIR, "version.txt")):
-        v_path = path.join(BUNDLE_DIR, INTERNAL_DIR, "version.txt")
-    elif path.exists(path.join(BUNDLE_DIR, "version.txt")):  # dev mode
-        v_path = path.join(BUNDLE_DIR, "version.txt")
+    if os.path.exists(os.path.join(BUNDLE_DIR, INTERNAL_DIR, "version.txt")):
+        v_path = os.path.join(BUNDLE_DIR, INTERNAL_DIR, "version.txt")
+    elif os.path.exists(os.path.join(BUNDLE_DIR, "version.txt")):  # dev mode
+        v_path = os.path.join(BUNDLE_DIR, "version.txt")
     with open(v_path, "r") as file:
         return file.readline().strip()
 
@@ -95,3 +114,8 @@ def stop(msg="", intup=True):
     if intup:
         input("Press Enter to exit...")
     sys.exit(0)
+
+
+def unzip_file(zip_path, extract_to):
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_to)
