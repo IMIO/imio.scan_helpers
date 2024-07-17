@@ -9,7 +9,7 @@ ns = parser.parse_args()
 
 a = Analysis(
     ['imio/scan_helpers/main.py'],
-    pathex=['imio/scan_helpers'],
+    pathex=['.', 'imio/scan_helpers'],
     binaries=[],
     datas=[("imio/scan_helpers/version.txt", ".")],
     hiddenimports=[],
@@ -39,6 +39,9 @@ exe0 = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
+
+from imio.scan_helpers.config import BUNDLE_NAME
+
 coll = COLLECT(
     exe0,
     a.binaries,
@@ -46,12 +49,12 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='imio-scan-helpers',
+    name=BUNDLE_NAME,
 )
 
 # Archive everything into a zip file
-zip_name = 'dist/imio-scan-helpers'
+zip_name = f'dist/{BUNDLE_NAME}'
 if ns.release:
-    zip_name = 'dist/imio-scan-helpers-{}'.format(ns.release)
-print('Creating zip file {}.zip'.format(zip_name))
-shutil.make_archive(zip_name, 'zip', 'dist/imio-scan-helpers')
+    zip_name += f'-{ns.release}'
+print(f'Creating zip file {zip_name}.zip')
+shutil.make_archive(zip_name, 'zip', f'dist/{BUNDLE_NAME}')
