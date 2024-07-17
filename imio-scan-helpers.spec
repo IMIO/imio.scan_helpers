@@ -50,9 +50,8 @@ coll = COLLECT(
 )
 
 # Archive everything into a zip file
-if ns.release is None:
-    zip_name = 'dist/imio-scan-helpers'
-else:
+zip_name = 'dist/imio-scan-helpers'
+if ns.release:
     zip_name = 'dist/imio-scan-helpers-{}'.format(ns.release)
 print('Creating zip file {}.zip'.format(zip_name))
 shutil.make_archive(zip_name, 'zip', 'dist/imio-scan-helpers')
