@@ -37,6 +37,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pyinstaller==6.9.0
+        pip install requests
     - name: Build exe
       run: |
         echo "release=${{ steps.release.outputs.RELEASE }}"
