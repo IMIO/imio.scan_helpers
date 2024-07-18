@@ -59,7 +59,8 @@ parser.add_argument("-r", "--release", dest="release", help="Get this release")
 ns = parser.parse_args()
 
 if ns.version:
-    stop("imio.scan_helpers version {}".format(get_current_version()), False)
+    print(f"imio.scan_helpers version {get_current_version()}")
+    sys.exit(0)
 if not ns.no_update:
     check_for_updates()
 
