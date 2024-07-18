@@ -30,7 +30,7 @@ import zipfile
 
 
 def copy_files(src_dir, dest_dir):
-    """Will create a bat to copy files aftermain process has ended and restart the main process without upgrade"""
+    """Will create a bat to copy files after main process has ended and restart the main process without upgrade"""
     exe_path = os.path.join(dest_dir, f"{MAIN_EXE_NAME}.exe")
     script_path = os.path.join(dest_dir, 'copy_files.bat')
 
