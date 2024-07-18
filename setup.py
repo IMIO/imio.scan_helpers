@@ -1,16 +1,15 @@
 # setup.py
 import os
-from imio.scan_helpers.utils import get_version
+from imio.scan_helpers.config import get_current_version
 from setuptools import find_packages
 from setuptools import setup
 
 
 setup(
     name='imio.scan_helpers',
-    version=get_version(),
+    version=get_current_version(),
     description='Various script files to handle local scan tool',
-    long_description=open('README.md').read(),
-    long_description_content_type='text/markdown',
+    long_description=open("README.rst").read() + "\n" + open("CHANGES.rst").read(),
     author='Stephan Geulette (IMIO)',
     author_email='support@imio.be',
     project_urls={
