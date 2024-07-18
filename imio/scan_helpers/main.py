@@ -16,12 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from config import get_current_version
 from utils import copy_files
 from utils import download_update
 from utils import get_bundle_dir
 from utils import get_download_dir_path
 from utils import get_latest_release_version
-from utils import get_current_version
 from utils import stop
 from utils import unzip_file
 

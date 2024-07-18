@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from config import BUNDLE_DIR
 from config import BUNDLE_NAME
 from config import DOWNLOAD_DIR
 from config import GITHUB_REPO
-from config import INTERNAL_DIR
+from config import IS_PROD
 from config import MAIN_EXE_NAME
 
 import os
@@ -28,15 +29,8 @@ import sys
 import zipfile
 
 
-BUNDLE_DIR = os.path.dirname(__file__)
-IS_PROD = False
-if os.path.basename(BUNDLE_DIR) == INTERNAL_DIR:
-    BUNDLE_DIR = os.path.dirname(BUNDLE_DIR)
-    IS_PROD = True
-
-
 def copy_files(src_dir, dest_dir):
-    """Will create a bat to copy files and restart"""
+    """Will create a bat to copy files aftermain process has ended and restart the main process without upgrade"""
     exe_path = os.path.join(dest_dir, f"{MAIN_EXE_NAME}.exe")
     script_path = os.path.join(dest_dir, 'copy_files.bat')
 
@@ -47,7 +41,7 @@ def copy_files(src_dir, dest_dir):
         script.write(f'xcopy /s /e /h /r /y /q "{src_dir}\\*" "{dest_dir}"\n')
         script.write(f'start "" "{exe_path}" -nu\n')
         script.write(f'rmdir /s /q "{src_dir}"\n')
-        script.write(f'del "{script_path}"\n')
+        # script.write(f'del "{script_path}"\n')
 
     if IS_PROD:
         subprocess.Popen(['cmd', '/c', script_path])
@@ -63,6 +57,7 @@ def download_update(url, download_path):
 
 
 def get_bundle_dir():
+    """Get bundle dir in prod or dev environment"""
     if IS_PROD:
         return BUNDLE_DIR
     else:  # dev mode
@@ -80,18 +75,8 @@ def get_download_dir_path():
     return os.path.join(get_bundle_dir(), DOWNLOAD_DIR)
 
 
-def get_current_version():
-    """Get current version"""
-    if os.path.exists(os.path.join(BUNDLE_DIR, INTERNAL_DIR, "version.txt")):
-        v_path = os.path.join(BUNDLE_DIR, INTERNAL_DIR, "version.txt")
-    elif os.path.exists(os.path.join(BUNDLE_DIR, "version.txt")):  # dev mode
-        v_path = os.path.join(BUNDLE_DIR, "version.txt")
-    with open(v_path, "r") as file:
-        return file.readline().strip()
-
-
 def get_latest_release_version(release=None):
-    """Get github latest or specified release info"""
+    """Get GitHub latest or specified release info"""
     if release:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
         ret = json_request(url)
@@ -103,13 +88,12 @@ def get_latest_release_version(release=None):
             stop(f"The release with tag '{release}' cannot be found")
     else:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
-    response = requests.get(url)
-    response.raise_for_status()
-    latest_release = response.json()
+    latest_release = json_request(url)
     return latest_release["tag_name"], latest_release["assets"][0]["browser_download_url"]
 
 
 def json_request(url):
+    """Simple json request"""
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
@@ -124,6 +108,7 @@ def stop(msg="", intup=True):
 
 
 def unzip_file(zip_path, extract_to):
+    """Unzip downloaded archive and delete it"""
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_to)
     os.remove(zip_path)
