@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from config import BUNDLE_DIR
-from config import BUNDLE_NAME
 from config import DOWNLOAD_DIR
+from config import get_bundle_dir
 from config import GITHUB_REPO
 from config import IS_PROD
+from config import logger
 from config import MAIN_EXE_NAME
 
 import os
@@ -37,7 +37,7 @@ def copy_files(src_dir, dest_dir):
     with open(script_path, 'w') as script:
         script.write(f'@echo off\n')
         script.write(f'echo Copying "{src_dir}" files to "{dest_dir}""\n')
-        script.write(f'timeout /t 2\n')  # waits for main script to end
+        script.write(f'timeout /t 3\n')  # waits for main script to end
         script.write(f'xcopy /s /e /h /r /y /q "{src_dir}\\*" "{dest_dir}"\n')
         script.write(f'start "" "{exe_path}" -nu\n')
         script.write(f'rmdir /s /q "{src_dir}"\n')
@@ -54,19 +54,6 @@ def download_update(url, download_path):
     with open(download_path, 'wb') as file:
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)
-
-
-def get_bundle_dir():
-    """Get bundle dir in prod or dev environment"""
-    if IS_PROD:
-        return BUNDLE_DIR
-    else:  # dev mode
-        root_dir = os.path.dirname(os.path.dirname(BUNDLE_DIR))
-        if os.path.exists(os.path.join(root_dir, "dist", BUNDLE_NAME)):
-            return os.path.join(root_dir, "dist", BUNDLE_NAME)
-        elif os.path.exists(os.path.join(root_dir, "dist")):
-            return os.path.join(root_dir, "dist")
-        return root_dir
 
 
 def get_download_dir_path():
@@ -101,7 +88,7 @@ def json_request(url):
 
 def stop(msg="", intup=True):
     if msg:
-        print(msg)
+        logger.warn(msg)
     if intup:
         input("Press Enter to exit...")
     sys.exit(0)
