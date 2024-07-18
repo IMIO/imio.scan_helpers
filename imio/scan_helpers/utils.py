@@ -19,10 +19,10 @@ from config import BUNDLE_NAME
 from config import DOWNLOAD_DIR
 from config import GITHUB_REPO
 from config import INTERNAL_DIR
+from config import MAIN_EXE_NAME
 
 import os
 import requests
-import shutil
 import subprocess
 import sys
 import zipfile
@@ -36,28 +36,18 @@ if os.path.basename(BUNDLE_DIR) == INTERNAL_DIR:
 
 
 def copy_files(src_dir, dest_dir):
-    """Will create a bat to copy file"""
-    # for item in os.listdir(src_dir):
-    #     # if item.startswith(f"{BUNDLE_NAME}-") and item.endswith(".zip"):
-    #     #     continue
-    #     s = os.path.join(src_dir, item)
-    #     d = os.path.join(dest_dir, item)
-    #     if os.path.isdir(s):
-    #         if os.path.exists(d):
-    #             shutil.rmtree(d)
-    #         shutil.copytree(s, d)
-    #     else:
-    #         shutil.copy2(s, d)
-    exe_path = os.path.join(dest_dir, "main.exe")
+    """Will create a bat to copy files and restart"""
+    exe_path = os.path.join(dest_dir, f"{MAIN_EXE_NAME}.exe")
     script_path = os.path.join(dest_dir, 'copy_files.bat')
 
     with open(script_path, 'w') as script:
         script.write(f'@echo off\n')
+        script.write(f'echo Copying "{src_dir}" files to "{dest_dir}""\n')
         script.write(f'timeout /t 2\n')  # waits for main script to end
-        script.write(f'xcopy /s /e /h /r /y "{src_dir}\\*" "{dest_dir}"\n')
+        script.write(f'xcopy /s /e /h /r /y /q"{src_dir}\\*" "{dest_dir}"\n')
         script.write(f'start "" "{exe_path}" -nu\n')
         script.write(f'rmdir /s /q "{src_dir}"\n')
-        # script.write(f'del "%~f0"\n')
+        script.write(f'del "%~f0"\n')
 
     if IS_PROD:
         subprocess.Popen(['cmd', '/c', script_path])

@@ -46,7 +46,6 @@ def check_for_updates():
         print(f"Unzipping {download_path} to {download_dir_path}")
         unzip_file(download_path, download_dir_path)
         bundle_dir = get_bundle_dir()
-        print(f"Copying files from {download_dir_path} to {bundle_dir}")
         copy_files(download_dir_path, bundle_dir)
         print("Will replace files and restart")
         sys.exit(0)

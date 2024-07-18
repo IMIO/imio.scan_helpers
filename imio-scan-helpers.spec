@@ -22,12 +22,14 @@ a = Analysis(
 )
 pyz = PYZ(a.pure)
 
+from imio.scan_helpers.config import MAIN_EXE_NAME
+
 exe0 = EXE(
     pyz,
     a.scripts,
     [],
     exclude_binaries=True,
-    name='main',
+    name=MAIN_EXE_NAME,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

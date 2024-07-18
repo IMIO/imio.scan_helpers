@@ -4,3 +4,4 @@ DOWNLOAD_DIR = "_downloads"
 EXECUTABLE_NAME = "main.exe"
 GITHUB_REPO = "IMIO/imio.scan_helpers"
 INTERNAL_DIR = "_internal"
+MAIN_EXE_NAME = BUNDLE_NAME
