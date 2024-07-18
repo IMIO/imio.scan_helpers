@@ -23,27 +23,44 @@ from config import INTERNAL_DIR
 import os
 import requests
 import shutil
+import subprocess
 import sys
 import zipfile
 
 
 BUNDLE_DIR = os.path.dirname(__file__)
+IS_PROD = False
 if os.path.basename(BUNDLE_DIR) == INTERNAL_DIR:
     BUNDLE_DIR = os.path.dirname(BUNDLE_DIR)
+    IS_PROD = True
 
 
 def copy_files(src_dir, dest_dir):
-    for item in os.listdir(src_dir):
-        # if item.startswith(f"{BUNDLE_NAME}-") and item.endswith(".zip"):
-        #     continue
-        s = os.path.join(src_dir, item)
-        d = os.path.join(dest_dir, item)
-        if os.path.isdir(s):
-            if os.path.exists(d):
-                shutil.rmtree(d)
-            shutil.copytree(s, d)
-        else:
-            shutil.copy2(s, d)
+    """Will create a bat to copy file"""
+    # for item in os.listdir(src_dir):
+    #     # if item.startswith(f"{BUNDLE_NAME}-") and item.endswith(".zip"):
+    #     #     continue
+    #     s = os.path.join(src_dir, item)
+    #     d = os.path.join(dest_dir, item)
+    #     if os.path.isdir(s):
+    #         if os.path.exists(d):
+    #             shutil.rmtree(d)
+    #         shutil.copytree(s, d)
+    #     else:
+    #         shutil.copy2(s, d)
+    exe_path = os.path.join(dest_dir, "main.exe")
+    script_path = os.path.join(dest_dir, 'copy_files.bat')
+
+    with open(script_path, 'w') as script:
+        script.write(f'@echo off\n')
+        script.write(f'timeout /t 2\n')  # waits for main script to end
+        script.write(f'xcopy /s /e /h /r /y "{src_dir}\\*" "{dest_dir}"\n')
+        script.write(f'start "" "{exe_path}" -nu\n')
+        script.write(f'rmdir /s /q "{src_dir}"\n')
+        # script.write(f'del "%~f0"\n')
+
+    if IS_PROD:
+        subprocess.Popen(['cmd', '/c', script_path])
 
 
 def download_update(url, download_path):
@@ -56,7 +73,7 @@ def download_update(url, download_path):
 
 
 def get_bundle_dir():
-    if os.path.exists(os.path.join(BUNDLE_DIR, INTERNAL_DIR)):
+    if IS_PROD:
         return BUNDLE_DIR
     else:  # dev mode
         root_dir = os.path.dirname(os.path.dirname(BUNDLE_DIR))
