@@ -44,7 +44,7 @@ def copy_files(src_dir, dest_dir):
         script.write(f'@echo off\n')
         script.write(f'echo Copying "{src_dir}" files to "{dest_dir}""\n')
         script.write(f'timeout /t 2\n')  # waits for main script to end
-        script.write(f'xcopy /s /e /h /r /y /q"{src_dir}\\*" "{dest_dir}"\n')
+        script.write(f'xcopy /s /e /h /r /y /q "{src_dir}\\*" "{dest_dir}"\n')
         script.write(f'start "" "{exe_path}" -nu\n')
         script.write(f'rmdir /s /q "{src_dir}"\n')
         script.write(f'del "%~f0"\n')

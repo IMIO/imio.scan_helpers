@@ -27,7 +27,6 @@ from utils import unzip_file
 
 import argparse
 import os
-import subprocess
 import sys
 
 
