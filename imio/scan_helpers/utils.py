@@ -47,7 +47,7 @@ def copy_files(src_dir, dest_dir):
         script.write(f'xcopy /s /e /h /r /y /q "{src_dir}\\*" "{dest_dir}"\n')
         script.write(f'start "" "{exe_path}" -nu\n')
         script.write(f'rmdir /s /q "{src_dir}"\n')
-        script.write(f'del "%~f0"\n')
+        script.write(f'del "{script_path}"\n')
 
     if IS_PROD:
         subprocess.Popen(['cmd', '/c', script_path])
