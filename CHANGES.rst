@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1.1 (unreleased)
+0.1.1 (2024-07-19)
 ------------------
 
 - Handled Windows startup add or remove following parameters.
