@@ -2,8 +2,6 @@
 # do not use __init__.py because pyinstaller puts it in _internal/__init__/__init__.pyc
 # config.pyc is well directly in _internal/
 import os
-import logging
-import sys
 
 
 BUNDLE_NAME = "imio-scan-helpers"
@@ -12,7 +10,6 @@ EXECUTABLE_NAME = "main.exe"
 GITHUB_REPO = "IMIO/imio.scan_helpers"
 INTERNAL_DIR = "_internal"
 MAIN_EXE_NAME = BUNDLE_NAME
-LOGGER_LEVEL = logging.INFO
 
 BUNDLE_DIR = os.path.dirname(__file__)
 IS_PROD = False
@@ -34,21 +31,6 @@ def get_bundle_dir():
         return root_dir
 
 
-logger = logging.getLogger()
-logger.setLevel(LOGGER_LEVEL)
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(LOGGER_LEVEL)
-file_handler = logging.FileHandler(os.path.join(get_bundle_dir(), 'ish.log'))
-file_handler.setLevel(LOGGER_LEVEL)
-# formatter = logging.Formatter('%(asctime)s %(levelname).1s (%(name)s) %(message)s')
-formatter = logging.Formatter('%(asctime)s %(levelname).1s %(message)s')
-formatter.datefmt = "%y%m%d %H%M%S"
-console_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
-
-
 def get_current_version():
     """Get current version. Here to be used in setup.py without namespace problem."""
     if os.path.exists(os.path.join(BUNDLE_DIR, INTERNAL_DIR, "version.txt")):
@@ -59,3 +41,4 @@ def get_current_version():
         return "0.0.0"
     with open(v_path, "r") as file:
         return file.readline().strip()
+

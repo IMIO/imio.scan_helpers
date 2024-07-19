@@ -19,7 +19,8 @@ from config import DOWNLOAD_DIR
 from config import get_bundle_dir
 from config import GITHUB_REPO
 from config import IS_PROD
-from config import logger
+from logger import close_logger
+from logger import log
 from config import MAIN_EXE_NAME
 
 import os
@@ -88,9 +89,10 @@ def json_request(url):
 
 def stop(msg="", intup=True):
     if msg:
-        logger.warn(msg)
+        log.error(msg)
     if intup:
         input("Press Enter to exit...")
+    close_logger()
     sys.exit(0)
 
 
@@ -99,3 +101,4 @@ def unzip_file(zip_path, extract_to):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_to)
     os.remove(zip_path)
+

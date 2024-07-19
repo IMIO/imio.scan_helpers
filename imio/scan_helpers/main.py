@@ -18,7 +18,9 @@
 #
 from config import get_bundle_dir
 from config import get_current_version
-from config import logger
+from config import MAIN_EXE_NAME
+from logger import close_logger
+from logger import log
 from utils import copy_files
 from utils import download_update
 from utils import get_download_dir_path
@@ -36,19 +38,18 @@ def check_for_updates():
     current_version = get_current_version()
     latest_version, download_url = get_latest_release_version(ns.release)
     if latest_version > current_version:
-        logger.info(f"New version available: {latest_version}")
+        log.info(f"New version available: {latest_version}")
         download_dir_path = get_download_dir_path()
         if not os.path.exists(download_dir_path):
             os.makedirs(download_dir_path)
         download_path = os.path.join(download_dir_path, download_url.split("/")[-1])
-        logger.info(f"Downloading {download_url} to {download_path}")
+        log.info(f"Downloading {download_url} to {download_path}")
         download_update(download_url, download_path)
-        logger.info(f"Unzipping {download_path} to {download_dir_path}")
+        log.info(f"Unzipping {download_path} to {download_dir_path}")
         unzip_file(download_path, download_dir_path)
-        bundle_dir = get_bundle_dir()
         copy_files(download_dir_path, bundle_dir)
-        logger.info("Will replace files and restart")
-        sys.exit(0)
+        log.info("Will replace files and restart")
+        stop(intup=False)
 
 
 # Argument parsing
@@ -60,10 +61,12 @@ ns = parser.parse_args()
 
 if ns.version:
     print(f"imio.scan_helpers version {get_current_version()}")
-    sys.exit(0)
+    stop(intup=False)
 if not ns.no_update:
     check_for_updates()
 
 # will do something
-logger.info(f"Current version is {get_current_version()}")
-stop("Doing something after update")
+log.info(f"Current version is {get_current_version()}")
+log.info("Nothing to do actually")
+close_logger()
+
