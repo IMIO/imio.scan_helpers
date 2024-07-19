@@ -25,3 +25,5 @@ Windows usage
 * imio-scan-helpers.exe : updates the software based on version and restarts it
 * imio-scan-helpers.exe -r tag_name: updates the software with specific release and restarts it
 * imio-scan-helpers.exe -nu : runs without update
+* imio-scan-helpers.exe --startup : Adds the software to the windows startup
+* imio-scan-helpers.exe --startup-remove : Removes the software from the windows startup
