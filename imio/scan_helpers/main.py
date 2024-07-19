@@ -33,7 +33,22 @@ import os
 import sys
 
 
-def check_for_updates():
+def add_to_startup(bundle_dir):
+    exe_path = os.path.join(bundle_dir, f"{MAIN_EXE_NAME}.exe")
+    key = r"Software\Microsoft\Windows\CurrentVersion\Run"
+    value_name = "IMIO_Scan_Helpers_Scripts"
+    try:
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, key, 0, winreg.KEY_SET_VALUE) as reg_key:
+            winreg.SetValueEx(reg_key, value_name, 0, winreg.REG_SZ, exe_path)
+            log.info(f"'{exe_path}' added to startup")
+    except ImportError as e:
+        log.error(f"Cannot import winreg: add to startup failed !!")
+    except Exception as e:
+        log.error(f"Error in add_to_startup : {e}")
+
+
+def check_for_updates(bundle_dir):
     """Check for updates"""
     current_version = get_current_version()
     latest_version, download_url = get_latest_release_version(ns.release)
@@ -57,13 +72,17 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-v", "--version", action="store_true", dest="version", help="Show version")
 parser.add_argument("-nu", "--no-update", action="store_true", dest="no_update", help="Do not check for updates")
 parser.add_argument("-r", "--release", dest="release", help="Get this release")
+parser.add_argument("--startup", action="store_true", dest="startup", help="Add exe to startup")
 ns = parser.parse_args()
 
 if ns.version:
     print(f"imio.scan_helpers version {get_current_version()}")
     stop(intup=False)
+bundle_dir = get_bundle_dir()
+if ns.startup:
+    add_to_startup(bundle_dir)
 if not ns.no_update:
-    check_for_updates()
+    check_for_updates(bundle_dir)
 
 # will do something
 log.info(f"Current version is {get_current_version()}")

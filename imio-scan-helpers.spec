@@ -60,3 +60,4 @@ if ns.release:
     zip_name += f'-{ns.release}'
 print(f'Creating zip file {zip_name}.zip')
 shutil.make_archive(zip_name, 'zip', f'dist/{BUNDLE_NAME}')
+
