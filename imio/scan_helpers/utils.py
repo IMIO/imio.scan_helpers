@@ -20,9 +20,11 @@ from config import DOWNLOAD_DIR
 from config import get_bundle_dir
 from config import GITHUB_REPO
 from config import IS_PROD
+from config import MAIN_BACKUP_DIR
 from logger import close_logger
 from logger import log
 from config import MAIN_EXE_NAME
+from config import PROFILES_DIRS
 
 import os
 import requests
@@ -64,6 +66,13 @@ def get_download_dir_path():
     return os.path.join(get_bundle_dir(), DOWNLOAD_DIR)
 
 
+def get_scan_profiles_dir():
+    """Get profile dir to read or write"""
+    for prof_dir in PROFILES_DIRS:
+        if os.path.exists(prof_dir):
+            return prof_dir
+
+
 def get_latest_release_version(release=None):
     """Get GitHub latest or specified release info"""
     if release:
@@ -81,11 +90,35 @@ def get_latest_release_version(release=None):
     return latest_release["tag_name"], latest_release["assets"][0]["browser_download_url"]
 
 
+def get_main_backup_dir():
+    """Get main backup dir"""
+    if not os.path.exists(MAIN_BACKUP_DIR):
+        os.makedirs(MAIN_BACKUP_DIR)
+    return MAIN_BACKUP_DIR
+
+
 def json_request(url):
     """Simple json request"""
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
+
+
+def read_dir(dirpath, with_path=False, only_folders=False, only_files=False, to_skip=[]):
+    """Read the dir and return files"""
+    files = []
+    for filename in os.listdir(dirpath):
+        if filename in to_skip:
+            continue
+        if only_folders and not os.path.isdir(os.path.join(dirpath, filename)):
+            continue
+        if only_files and not os.path.isfile(os.path.join(dirpath, filename)):
+            continue
+        if with_path:
+            files.append(os.path.join(dirpath, filename))
+        else:
+            files.append(filename)
+    return files
 
 
 def stop(msg="", intup=True):

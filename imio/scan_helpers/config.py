@@ -11,6 +11,8 @@ EXECUTABLE_NAME = "main.exe"
 GITHUB_REPO = "IMIO/imio.scan_helpers"
 INTERNAL_DIR = "_internal"
 MAIN_EXE_NAME = BUNDLE_NAME
+PROFILES_DIRS = ["c:\\ProgramData\\Kofax\\Kofax Express 3.3\\Jobs", "c:\\ProgramData\\Kofax\\Kofax Express 3.2\\Jobs"]
+MAIN_BACKUP_DIR = "c:\\kofax_backup"
 
 BUNDLE_DIR = os.path.dirname(__file__)
 IS_PROD = False
