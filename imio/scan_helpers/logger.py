@@ -30,4 +30,3 @@ def close_logger():
     for handler in log.handlers:
         if isinstance(handler, logging.FileHandler):
             handler.close()
-

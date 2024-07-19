@@ -5,6 +5,7 @@ import os
 
 
 BUNDLE_NAME = "imio-scan-helpers"
+COPY_BAT_NAME = "copy_release_files_and_restart.bat"
 DOWNLOAD_DIR = "_downloads"
 EXECUTABLE_NAME = "main.exe"
 GITHUB_REPO = "IMIO/imio.scan_helpers"
@@ -41,4 +42,3 @@ def get_current_version():
         return "0.0.0"
     with open(v_path, "r") as file:
         return file.readline().strip()
-

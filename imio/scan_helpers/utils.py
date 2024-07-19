@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from config import COPY_BAT_NAME
 from config import DOWNLOAD_DIR
 from config import get_bundle_dir
 from config import GITHUB_REPO
@@ -30,10 +31,10 @@ import sys
 import zipfile
 
 
-def copy_files(src_dir, dest_dir):
+def copy_release_files_and_restart(src_dir, dest_dir):
     """Will create a bat to copy files after main process has ended and restart the main process without upgrade"""
     exe_path = os.path.join(dest_dir, f"{MAIN_EXE_NAME}.exe")
-    script_path = os.path.join(dest_dir, 'copy_files.bat')
+    script_path = os.path.join(dest_dir, COPY_BAT_NAME)
 
     with open(script_path, 'w') as script:
         script.write(f'@echo off\n')
@@ -101,4 +102,3 @@ def unzip_file(zip_path, extract_to):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_to)
     os.remove(zip_path)
-

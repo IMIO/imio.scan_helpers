@@ -21,7 +21,7 @@ from config import get_current_version
 from config import MAIN_EXE_NAME
 from logger import close_logger
 from logger import log
-from utils import copy_files
+from utils import copy_release_files_and_restart
 from utils import download_update
 from utils import get_download_dir_path
 from utils import get_latest_release_version
@@ -67,7 +67,7 @@ def check_for_updates(main_dir):
         download_update(download_url, download_path)
         log.info(f"Unzipping {download_path} to {download_dir_path}")
         unzip_file(download_path, download_dir_path)
-        copy_files(download_dir_path, main_dir)
+        copy_release_files_and_restart(download_dir_path, main_dir)
         log.info("Will replace files and restart")
         stop(intup=False)
 
@@ -89,11 +89,13 @@ if ns.startup:
     handle_startup(bundle_dir)
 if ns.startup_remove:
     handle_startup(bundle_dir, action="remove")
-if not ns.no_update:
+if ns.no_update:
+    # remove bat file
+    pass
+else:
     check_for_updates(bundle_dir)
 
 # will do something
 log.info(f"Current version is {get_current_version()}")
 log.info("Nothing to do actually")
 close_logger()
-
