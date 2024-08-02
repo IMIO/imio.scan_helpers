@@ -2,6 +2,7 @@
 # do not use __init__.py because pyinstaller puts it in _internal/__init__/__init__.pyc
 # config.pyc is well directly in _internal/
 import os
+import platform
 
 
 BUNDLE_NAME = "imio-scan-helpers"
@@ -12,7 +13,17 @@ GITHUB_REPO = "IMIO/imio.scan_helpers"
 INTERNAL_DIR = "_internal"
 MAIN_EXE_NAME = BUNDLE_NAME
 PROFILES_DIRS = ["c:\\ProgramData\\Kofax\\Kofax Express 3.3\\Jobs", "c:\\ProgramData\\Kofax\\Kofax Express 3.2\\Jobs"]
-MAIN_BACKUP_DIR = "c:\\kofax_backup"
+PROFILES_DIRS = [("ProgramData", "Kofax", "Kofax Express 3.3", "Jobs"),
+                 ("ProgramData", "Kofax", "Kofax Express 3.2", "Jobs")]
+PROFILES_DIRS = [os.path.join(*tup) for tup in PROFILES_DIRS]
+MAIN_BACKUP_DIR = "kofax_backup"
+
+if platform.system() == "Windows":
+    PROFILES_DIRS = [os.path.join("C:", path) for path in PROFILES_DIRS]
+    MAIN_BACKUP_DIR = os.path.join("C:", MAIN_BACKUP_DIR)
+else:
+    PROFILES_DIRS = [os.path.join("test_env", path) for path in PROFILES_DIRS]
+    MAIN_BACKUP_DIR = os.path.join("test_env", MAIN_BACKUP_DIR)
 
 BUNDLE_DIR = os.path.dirname(__file__)
 IS_PROD = False

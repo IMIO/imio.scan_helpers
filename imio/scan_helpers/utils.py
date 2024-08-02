@@ -28,9 +28,24 @@ from config import PROFILES_DIRS
 
 import os
 import requests
+import shutil
 import subprocess
 import sys
 import zipfile
+
+
+def copy_sub_files(src_dir, dest_dir, files=[]):
+    for item in os.listdir(src_dir):
+        if files and item not in files:
+            continue
+        s = os.path.join(src_dir, item)
+        d = os.path.join(dest_dir, item)
+        if os.path.isdir(s):
+            if os.path.exists(d):
+                shutil.rmtree(d)
+            shutil.copytree(s, d)
+        else:
+            shutil.copy2(s, d)
 
 
 def copy_release_files_and_restart(src_dir, dest_dir):
@@ -60,17 +75,18 @@ def download_update(url, download_path):
             file.write(chunk)
 
 
+def get_dated_backup_dir(main_dir, day):
+    """Get dated backup dir"""
+    dated_dir = os.path.join(main_dir, day)
+    if not os.path.exists(dated_dir):
+        os.makedirs(dated_dir)
+    return dated_dir
+
+
 def get_download_dir_path():
     # maybe use tempdir
     # temp_dir = tempfile.gettempdir()
     return os.path.join(get_bundle_dir(), DOWNLOAD_DIR)
-
-
-def get_scan_profiles_dir():
-    """Get profile dir to read or write"""
-    for prof_dir in PROFILES_DIRS:
-        if os.path.exists(prof_dir):
-            return prof_dir
 
 
 def get_latest_release_version(release=None):
@@ -95,6 +111,13 @@ def get_main_backup_dir():
     if not os.path.exists(MAIN_BACKUP_DIR):
         os.makedirs(MAIN_BACKUP_DIR)
     return MAIN_BACKUP_DIR
+
+
+def get_scan_profiles_dir():
+    """Get profile dir to read or write"""
+    for prof_dir in PROFILES_DIRS:
+        if os.path.exists(prof_dir):
+            return prof_dir
 
 
 def json_request(url):

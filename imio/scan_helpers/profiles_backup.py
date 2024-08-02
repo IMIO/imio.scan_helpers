@@ -16,14 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from datetime import datetime
+from logger import close_logger
 from logger import log
+from utils import copy_sub_files
+from utils import get_dated_backup_dir
 from utils import get_main_backup_dir
 from utils import get_scan_profiles_dir
 from utils import read_dir
 from utils import stop
 
 import argparse
-from datetime import datetime
 
 
 # Argument parsing
@@ -32,11 +35,14 @@ parser = argparse.ArgumentParser()
 # parser.add_argument("-r", "--release", dest="release", help="Get this release")
 ns = parser.parse_args()
 
-log.info(f"Starting backup script")
+log.info("Starting backup script")
 main_prof_dir = get_scan_profiles_dir()
-prof_dirs = read_dir(main_prof_dir, with_path=True, only_folders=True)
+prof_dirs = read_dir(main_prof_dir, with_path=False, only_folders=True)
 if not prof_dirs:
     stop(f"No profiles found in '{main_prof_dir}'")
 main_backup_dir = get_main_backup_dir()
 day = datetime.now().strftime("%Y-%m-%d")
-
+dated_backup_dir = get_dated_backup_dir(main_backup_dir, day=day)
+copy_sub_files(main_prof_dir, dated_backup_dir, files=prof_dirs)
+log.info("Finished backup script")
+close_logger()
