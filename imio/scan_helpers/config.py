@@ -18,6 +18,7 @@ PROFILES_DIRS = ["c:\\ProgramData\\Kofax\\Kofax Express 3.3\\Jobs", "c:\\Program
 PROFILES_DIRS = [("ProgramData", "Kofax", "Kofax Express 3.3", "Jobs"),
                  ("ProgramData", "Kofax", "Kofax Express 3.2", "Jobs")]
 PROFILES_DIRS = [os.path.join(*tup) for tup in PROFILES_DIRS]
+SCRIPT_PROFILES_BACKUP_NAME = "profiles-backup"
 
 if platform.system() == "Windows":
     PROFILES_DIRS = [os.path.join("C:", path) for path in PROFILES_DIRS]

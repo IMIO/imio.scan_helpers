@@ -7,7 +7,7 @@ parser.add_argument("-r", "--release", dest="release", help="release to include 
 ns = parser.parse_args()
 
 
-a = Analysis(
+a0 = Analysis(
     ['imio/scan_helpers/main.py'],
     pathex=['.', 'imio/scan_helpers'],
     binaries=[],
@@ -20,16 +20,50 @@ a = Analysis(
     noarchive=False,
     optimize=0,
 )
-pyz = PYZ(a.pure)
+pyz0 = PYZ(a0.pure)
+
+a1 = Analysis(
+    ['imio/scan_helpers/profiles_backup.py'],
+    pathex=['.', 'imio/scan_helpers'],
+    binaries=[],
+    datas=[],
+    hiddenimports=[],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
+    noarchive=False,
+    optimize=0,
+)
+pyz1 = PYZ(a1.pure)
 
 from imio.scan_helpers.config import MAIN_EXE_NAME
+from imio.scan_helpers.config import SCRIPT_PROFILES_BACKUP_NAME
 
 exe0 = EXE(
-    pyz,
-    a.scripts,
+    pyz0,
+    a0.scripts,
     [],
     exclude_binaries=True,
     name=MAIN_EXE_NAME,
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)
+
+exe1 = EXE(
+    pyz1,
+    a1.scripts,
+    [],
+    exclude_binaries=True,
+    name=SCRIPT_PROFILES_BACKUP_NAME,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -46,8 +80,9 @@ from imio.scan_helpers.config import BUNDLE_NAME
 
 coll = COLLECT(
     exe0,
-    a.binaries,
-    a.datas,
+    exe1,
+    a0.binaries + a1.binaries,
+    a0.datas + a1.datas,
     strip=False,
     upx=True,
     upx_exclude=[],
@@ -60,4 +95,3 @@ if ns.release:
     zip_name += f'-{ns.release}'
 print(f'Creating zip file {zip_name}.zip')
 shutil.make_archive(zip_name, 'zip', f'dist/{BUNDLE_NAME}')
-
