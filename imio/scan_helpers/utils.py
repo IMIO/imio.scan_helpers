@@ -21,11 +21,13 @@ from config import get_bundle_dir
 from config import GITHUB_REPO
 from config import IS_PROD
 from config import MAIN_BACKUP_DIR
+from config import PARAMS_FILE_NAME
 from logger import close_logger
 from logger import log
 from config import MAIN_EXE_NAME
 from config import PROFILES_DIRS
 
+import json
 import os
 import requests
 import shutil
@@ -75,9 +77,9 @@ def download_update(url, download_path):
             file.write(chunk)
 
 
-def get_dated_backup_dir(main_dir, day):
+def get_dated_backup_dir(backup_dir, day):
     """Get dated backup dir"""
-    dated_dir = os.path.join(main_dir, day)
+    dated_dir = os.path.join(backup_dir, day)
     if not os.path.exists(dated_dir):
         os.makedirs(dated_dir)
     return dated_dir
@@ -151,6 +153,19 @@ def stop(msg="", intup=True):
         input("Press Enter to exit...")
     close_logger()
     sys.exit(0)
+
+
+def store_client_id(main_dir, client_id):
+    """Store client_id in file"""
+    params_file = os.path.join(main_dir, PARAMS_FILE_NAME)
+    dic = {}
+    if os.path.exists(params_file):
+        with open(params_file) as pf:
+            dic = json.load(pf)
+    if "CLIENT_ID" not in dic:
+        dic["CLIENT_ID"] = client_id
+        with open(params_file, "w") as pf:
+            json.dump(dic, pf)
 
 
 def unzip_file(zip_path, extract_to):

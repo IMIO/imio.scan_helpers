@@ -11,12 +11,13 @@ DOWNLOAD_DIR = "_downloads"
 EXECUTABLE_NAME = "main.exe"
 GITHUB_REPO = "IMIO/imio.scan_helpers"
 INTERNAL_DIR = "_internal"
+MAIN_BACKUP_DIR = "kofax_backup"
 MAIN_EXE_NAME = BUNDLE_NAME
+PARAMS_FILE_NAME = "configuration.json"
 PROFILES_DIRS = ["c:\\ProgramData\\Kofax\\Kofax Express 3.3\\Jobs", "c:\\ProgramData\\Kofax\\Kofax Express 3.2\\Jobs"]
 PROFILES_DIRS = [("ProgramData", "Kofax", "Kofax Express 3.3", "Jobs"),
                  ("ProgramData", "Kofax", "Kofax Express 3.2", "Jobs")]
 PROFILES_DIRS = [os.path.join(*tup) for tup in PROFILES_DIRS]
-MAIN_BACKUP_DIR = "kofax_backup"
 
 if platform.system() == "Windows":
     PROFILES_DIRS = [os.path.join("C:", path) for path in PROFILES_DIRS]

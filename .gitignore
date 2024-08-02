@@ -2,6 +2,7 @@ __pycache__
 active
 bin/
 build/
+configuration.json
 dist/
 doc/
 .idea/

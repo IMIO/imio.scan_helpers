@@ -26,6 +26,7 @@ from utils import download_update
 from utils import get_download_dir_path
 from utils import get_latest_release_version
 from utils import stop
+from utils import store_client_id
 from utils import unzip_file
 
 import argparse
@@ -75,6 +76,7 @@ def check_for_updates(main_dir):
 # Argument parsing
 parser = argparse.ArgumentParser()
 parser.add_argument("-v", "--version", action="store_true", dest="version", help="Show version")
+parser.add_argument("-c", "--client-id", dest="client_id", help="Set client id")
 parser.add_argument("-nu", "--no-update", action="store_true", dest="no_update", help="Do not check for updates")
 parser.add_argument("-r", "--release", dest="release", help="Get this release")
 parser.add_argument("--startup", action="store_true", dest="startup", help="Add exe to startup")
@@ -85,6 +87,9 @@ if ns.version:
     print(f"imio.scan_helpers version {get_current_version()}")
     stop(intup=False)
 bundle_dir = get_bundle_dir()
+# log.info(f"dir={bundle_dir}")
+if ns.client_id:
+    store_client_id(bundle_dir, ns.client_id)
 if ns.startup:
     handle_startup(bundle_dir)
 if ns.startup_remove:

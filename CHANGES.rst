@@ -4,8 +4,10 @@ Changelog
 0.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Added profiles_backup script.
+  [sgeulette]
+- Stored client identification in configuration file
+  [sgeulette]
 
 0.1.1 (2024-07-19)
 ------------------
