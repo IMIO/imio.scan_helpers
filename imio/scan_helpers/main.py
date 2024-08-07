@@ -19,12 +19,15 @@
 from config import get_bundle_dir
 from config import get_current_version
 from config import MAIN_EXE_NAME
+from config import PARAMS_FILE_NAME
 from logger import close_logger
 from logger import log
 from utils import copy_release_files_and_restart
 from utils import download_update
 from utils import get_download_dir_path
 from utils import get_latest_release_version
+from utils import get_parameter
+from utils import send_log_message
 from utils import stop
 from utils import store_client_id
 from utils import unzip_file
@@ -34,7 +37,7 @@ import os
 import sys
 
 
-def handle_startup(main_dir, action="add"):
+def handle_startup(main_dir, clientid, action="add"):
     """Add/remove exe to/from startup"""
     exe_path = os.path.join(main_dir, f"{MAIN_EXE_NAME}.exe")
     key = r"Software\Microsoft\Windows\CurrentVersion\Run"
@@ -49,15 +52,15 @@ def handle_startup(main_dir, action="add"):
                 winreg.DeleteValue(reg_key, value_name)
                 log.info(f"'{exe_path}' removed from startup")
     except ImportError as e:
-        log.error(f"Cannot import winreg: add to startup failed !!")
+        send_log_message(f"Cannot import winreg: add to startup failed !!", clientid)
     except Exception as e:
-        log.error(f"Error in handle_startup : {e}")
+        send_log_message(f"Error in handle_startup : {e}", clientid)
 
 
-def check_for_updates(main_dir):
+def check_for_updates(main_dir, clientid):
     """Check for updates"""
     current_version = get_current_version()
-    latest_version, download_url = get_latest_release_version(ns.release)
+    latest_version, download_url = get_latest_release_version(clientid, ns.release)
     if latest_version > current_version:
         log.info(f"New version available: {latest_version}")
         download_dir_path = get_download_dir_path()
@@ -87,18 +90,23 @@ if ns.version:
     print(f"imio.scan_helpers version {get_current_version()}")
     stop(intup=False)
 bundle_dir = get_bundle_dir()
-# log.info(f"dir={bundle_dir}")
+log.info(f"dir={bundle_dir}")
+params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
 if ns.client_id:
-    store_client_id(bundle_dir, ns.client_id)
-if ns.startup:
-    handle_startup(bundle_dir)
-if ns.startup_remove:
-    handle_startup(bundle_dir, action="remove")
-if ns.no_update:
-    # remove bat file
-    pass
-else:
-    check_for_updates(bundle_dir)
+    store_client_id(params_file, ns.client_id)
+client_id = get_parameter(params_file, "CLIENT_ID")
+try:
+    if ns.startup:
+        handle_startup(bundle_dir, client_id)
+    if ns.startup_remove:
+        handle_startup(bundle_dir, client_id, action="remove")
+    if ns.no_update:
+        # remove bat file
+        pass
+    else:
+        check_for_updates(bundle_dir, client_id)
+except Exception as ex:
+    send_log_message(f"General error in main script '{ex}'", client_id)
 
 # will do something
 log.info(f"Current version is {get_current_version()}")

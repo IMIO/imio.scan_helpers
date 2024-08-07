@@ -21,14 +21,15 @@ from config import get_bundle_dir
 from config import GITHUB_REPO
 from config import IS_PROD
 from config import MAIN_BACKUP_DIR
-from config import PARAMS_FILE_NAME
-from logger import close_logger
-from logger import log
 from config import MAIN_EXE_NAME
 from config import PROFILES_DIRS
+from config import SERVER_URL
+from logger import close_logger
+from logger import log
 
 import json
 import os
+import re
 import requests
 import shutil
 import subprocess
@@ -91,20 +92,20 @@ def get_download_dir_path():
     return os.path.join(get_bundle_dir(), DOWNLOAD_DIR)
 
 
-def get_latest_release_version(release=None):
+def get_latest_release_version(clientid, release=None):
     """Get GitHub latest or specified release info"""
     if release:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
-        ret = json_request(url)
+        ret = json_request(url, clientid)
         for dic in ret:
             if dic["tag_name"] == release:
                 url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/{dic['id']}"
                 break
         else:
-            stop(f"The release with tag '{release}' cannot be found")
+            stop(f"The release with tag '{release}' cannot be found", clientid=clientid)
     else:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
-    latest_release = json_request(url)
+    latest_release = json_request(url, clientid)
     return latest_release["tag_name"], latest_release["assets"][0]["browser_download_url"]
 
 
@@ -115,6 +116,18 @@ def get_main_backup_dir():
     return MAIN_BACKUP_DIR
 
 
+def get_parameter(params_file, param=None):
+    """Get a specific parameter or the full dic"""
+    dic = {}
+    if os.path.exists(params_file):
+        with open(params_file) as pf:
+            dic = json.load(pf)
+    if param:
+        return dic.get(param)
+    else:
+        return dic
+
+
 def get_scan_profiles_dir():
     """Get profile dir to read or write"""
     for prof_dir in PROFILES_DIRS:
@@ -122,10 +135,13 @@ def get_scan_profiles_dir():
             return prof_dir
 
 
-def json_request(url):
+def json_request(url, clientid):
     """Simple json request"""
-    response = requests.get(url)
-    response.raise_for_status()
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except Exception as err:
+        send_log_message(f"Cannot request '{url}' : '{err}'", clientid)
     return response.json()
 
 
@@ -146,22 +162,35 @@ def read_dir(dirpath, with_path=False, only_folders=False, only_files=False, to_
     return files
 
 
-def stop(msg="", intup=True):
+def send_log_message(message, client_id, log_method=log.error):
+    data = {
+        'client_id': client_id,
+        'message': message
+    }
+    if log_method:
+        log_method(message)
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+    response = requests.post(SERVER_URL, headers=headers, data=json.dumps(data))
+    if response.status_code != 200:
+        log.error(f"Failed to send log message: {response.text}")
+
+
+def stop(msg="", intup=True, clientid=None):
     if msg:
         log.error(msg)
+        if clientid:
+            send_log_message(msg, clientid, log_method=None)
     if intup:
         input("Press Enter to exit...")
     close_logger()
     sys.exit(0)
 
 
-def store_client_id(main_dir, client_id):
+def store_client_id(params_file, client_id):
     """Store client_id in file"""
-    params_file = os.path.join(main_dir, PARAMS_FILE_NAME)
-    dic = {}
-    if os.path.exists(params_file):
-        with open(params_file) as pf:
-            dic = json.load(pf)
+    if not re.match(r'^0\d{5}$', client_id):
+        stop(f"Given client_id '{client_id}' not well formed !")
+    dic = get_parameter(params_file)
     if "CLIENT_ID" not in dic:
         dic["CLIENT_ID"] = client_id
         with open(params_file, "w") as pf:
