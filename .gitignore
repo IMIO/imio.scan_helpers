@@ -11,4 +11,5 @@ lib/
 .python-version
 pyvenv.cfg
 src/
+test_env/kofax_backup/*
 .vscode/

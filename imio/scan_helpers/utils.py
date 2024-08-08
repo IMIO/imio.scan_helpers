@@ -92,6 +92,16 @@ def get_download_dir_path():
     return os.path.join(get_bundle_dir(), DOWNLOAD_DIR)
 
 
+def get_last_dated_backup_dir(backup_dir):
+    """Get last dated backup dir"""
+    subdirs = read_dir(backup_dir, with_path=False, only_folders=True)
+    subdirs = [adir for adir in subdirs if re.match(r'^\d{4}-\d{2}-\d{2}$', adir)]
+    if subdirs:
+        subdirs.sort(reverse=True)
+        return os.path.join(backup_dir, subdirs[0])
+    return None
+
+
 def get_latest_release_version(clientid, release=None):
     """Get GitHub latest or specified release info"""
     if release:
