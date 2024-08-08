@@ -30,3 +30,4 @@ Windows usage
 * imio-scan-helpers.exe --startup : adds the software to the windows startup
 * imio-scan-helpers.exe --startup-remove : removes the software from the windows startup
 * profiles-backup.exe : backups profiles
+* profiles-restore.exe : restores profiles

@@ -37,8 +37,24 @@ a1 = Analysis(
 )
 pyz1 = PYZ(a1.pure)
 
+a2 = Analysis(
+    ['imio/scan_helpers/profiles_restore.py'],
+    pathex=['.', 'imio/scan_helpers'],
+    binaries=[],
+    datas=[],
+    hiddenimports=[],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
+    noarchive=False,
+    optimize=0,
+)
+pyz2 = PYZ(a2.pure)
+
 from imio.scan_helpers.config import MAIN_EXE_NAME
 from imio.scan_helpers.config import SCRIPT_PROFILES_BACKUP_NAME
+from imio.scan_helpers.config import SCRIPT_PROFILES_RESTORE_NAME
 
 exe0 = EXE(
     pyz0,
@@ -76,13 +92,32 @@ exe1 = EXE(
     entitlements_file=None,
 )
 
+exe2 = EXE(
+    pyz2,
+    a2.scripts,
+    [],
+    exclude_binaries=True,
+    name=SCRIPT_PROFILES_RESTORE_NAME,
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)
+
 from imio.scan_helpers.config import BUNDLE_NAME
 
 coll = COLLECT(
     exe0,
     exe1,
-    a0.binaries + a1.binaries,
-    a0.datas + a1.datas,
+    exe2,
+    a0.binaries + a1.binaries + a2.binaries,
+    a0.datas + a1.datas + a2.datas,
     strip=False,
     upx=True,
     upx_exclude=[],

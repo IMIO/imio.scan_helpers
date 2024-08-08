@@ -18,6 +18,7 @@ PROFILES_DIRS = [("ProgramData", "Kofax", "Kofax Express 3.3", "Jobs"),
                  ("ProgramData", "Kofax", "Kofax Express 3.2", "Jobs")]
 PROFILES_DIRS = [os.path.join(*tup) for tup in PROFILES_DIRS]
 SCRIPT_PROFILES_BACKUP_NAME = "profiles-backup"
+SCRIPT_PROFILES_RESTORE_NAME = "profiles-restore"
 SERVER_URL = "https://scanlogger.imio.be/@message-receiver"
 SERVER_URL = "http://localhost:8080/isl1/@message-receiver"
 

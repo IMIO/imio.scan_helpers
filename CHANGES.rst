@@ -8,6 +8,8 @@ Changelog
   [sgeulette]
 - Stored client identification in configuration file
   [sgeulette]
+- Added profiles_restore script.
+  [sgeulette]
 
 0.1.1 (2024-07-19)
 ------------------
