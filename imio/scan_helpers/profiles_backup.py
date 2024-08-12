@@ -43,18 +43,18 @@ ns = parser.parse_args()
 log.info("Starting backup script")
 bundle_dir = get_bundle_dir()
 params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
-client_id = get_parameter(params_file, "CLIENT_ID")
+parameters = get_parameter(params_file)
 try:
     main_prof_dir = get_scan_profiles_dir()
     prof_dirs = read_dir(main_prof_dir, with_path=False, only_folders=True)
     if not prof_dirs:
-        stop(f"No profiles found in '{main_prof_dir}'", client_id=client_id)
+        stop(f"No profiles found in '{main_prof_dir}'", params=parameters)
     main_backup_dir = get_main_backup_dir()
     day = datetime.now().strftime("%Y-%m-%d")
     dated_backup_dir = get_dated_backup_dir(main_backup_dir, day=day)
     copy_sub_files(main_prof_dir, dated_backup_dir, files=prof_dirs)
 except Exception as ex:
-    send_log_message(f"General error in profiles-backup script '{ex}'", client_id)
+    send_log_message(f"General error in profiles-backup script '{ex}'", parameters)
 
 log.info("Finished backup script")
 close_logger()

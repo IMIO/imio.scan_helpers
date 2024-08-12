@@ -102,20 +102,20 @@ def get_last_dated_backup_dir(backup_dir):
     return None
 
 
-def get_latest_release_version(clientid, release=None):
+def get_latest_release_version(params, release=None):
     """Get GitHub latest or specified release info"""
     if release:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
-        ret = json_request(url, clientid)
+        ret = json_request(url, params)
         for dic in ret:
             if dic["tag_name"] == release:
                 url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/{dic['id']}"
                 break
         else:
-            stop(f"The release with tag '{release}' cannot be found", clientid=clientid)
+            stop(f"The release with tag '{release}' cannot be found", params=params)
     else:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
-    latest_release = json_request(url, clientid)
+    latest_release = json_request(url, params)
     return latest_release["tag_name"], latest_release["assets"][0]["browser_download_url"]
 
 
@@ -145,13 +145,13 @@ def get_scan_profiles_dir():
             return prof_dir
 
 
-def json_request(url, clientid):
+def json_request(url, params):
     """Simple json request"""
     try:
         response = requests.get(url)
         response.raise_for_status()
     except Exception as err:
-        send_log_message(f"Cannot request '{url}' : '{err}'", clientid)
+        send_log_message(f"Cannot request '{url}' : '{err}'", params)
     return response.json()
 
 
@@ -172,36 +172,36 @@ def read_dir(dirpath, with_path=False, only_folders=False, only_files=False, to_
     return files
 
 
-def send_log_message(message, client_id, log_method=log.error):
-    data = {"client_id": client_id, "message": message}
+def send_log_message(message, params, log_method=log.error):
+    data = {"client_id": params["CLIENT_ID"], "message": message}
     if log_method:
         log_method(message)
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
-    response = requests.post(SERVER_URL, headers=headers, data=json.dumps(data))
+    response = requests.post(SERVER_URL, headers=headers, data=json.dumps(data), auth=("loguser", params["PLONE_PWD"]))
     if response.status_code != 200:
         log.error(f"Failed to send log message: {response.text}")
 
 
-def stop(msg="", intup=True, clientid=None):
+def set_parameter(params_file, key, value):
+    """Store client_id in file"""
+    if key == "CLIENT_ID" and not re.match(r"^0\d{5}$", value):
+        stop(f"Given client_id '{value}' not well formed !")
+    dic = get_parameter(params_file)
+    if key not in dic:
+        dic[key] = value
+        with open(params_file, "w") as pf:
+            json.dump(dic, pf)
+
+
+def stop(msg="", intup=True, params=None):
     if msg:
         log.error(msg)
-        if clientid:
-            send_log_message(msg, clientid, log_method=None)
+        if params:
+            send_log_message(msg, params, log_method=None)
     if intup:
         input("Press Enter to exit...")
     close_logger()
     sys.exit(0)
-
-
-def store_client_id(params_file, client_id):
-    """Store client_id in file"""
-    if not re.match(r"^0\d{5}$", client_id):
-        stop(f"Given client_id '{client_id}' not well formed !")
-    dic = get_parameter(params_file)
-    if "CLIENT_ID" not in dic:
-        dic["CLIENT_ID"] = client_id
-        with open(params_file, "w") as pf:
-            json.dump(dic, pf)
 
 
 def unzip_file(zip_path, extract_to):

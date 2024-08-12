@@ -28,15 +28,15 @@ from utils import get_download_dir_path
 from utils import get_latest_release_version
 from utils import get_parameter
 from utils import send_log_message
+from utils import set_parameter
 from utils import stop
-from utils import store_client_id
 from utils import unzip_file
 
 import argparse
 import os
 
 
-def handle_startup(main_dir, clientid, action="add"):
+def handle_startup(main_dir, params, action="add"):
     """Add/remove exe to/from startup"""
     exe_path = os.path.join(main_dir, f"{MAIN_EXE_NAME}.exe")
     key = r"Software\Microsoft\Windows\CurrentVersion\Run"
@@ -52,15 +52,15 @@ def handle_startup(main_dir, clientid, action="add"):
                 winreg.DeleteValue(reg_key, value_name)
                 log.info(f"'{exe_path}' removed from startup")
     except ImportError as e:
-        send_log_message(f"Cannot import winreg: add to startup failed !!", clientid)
+        send_log_message("Cannot import winreg: add to startup failed !!", params)
     except Exception as e:
-        send_log_message(f"Error in handle_startup : {e}", clientid)
+        send_log_message(f"Error in handle_startup : {e}", params)
 
 
-def check_for_updates(main_dir, clientid):
+def check_for_updates(main_dir, params):
     """Check for updates"""
     current_version = get_current_version()
-    latest_version, download_url = get_latest_release_version(clientid, ns.release)
+    latest_version, download_url = get_latest_release_version(params, ns.release)
     if latest_version > current_version or ns.release:
         log.info(f"New version available: {latest_version}")
         download_dir_path = get_download_dir_path()
@@ -80,6 +80,7 @@ def check_for_updates(main_dir, clientid):
 parser = argparse.ArgumentParser()
 parser.add_argument("-v", "--version", action="store_true", dest="version", help="Show version")
 parser.add_argument("-c", "--client-id", dest="client_id", help="Set client id")
+parser.add_argument("-p", "--password", dest="password", help="Set password")
 parser.add_argument("-nu", "--no-update", action="store_true", dest="no_update", help="Do not check for updates")
 parser.add_argument("-r", "--release", dest="release", help="Get this release")
 parser.add_argument("--startup", action="store_true", dest="startup", help="Add exe to startup")
@@ -93,20 +94,24 @@ bundle_dir = get_bundle_dir()
 log.info(f"dir={bundle_dir}")
 params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
 if ns.client_id:
-    store_client_id(params_file, ns.client_id)
-client_id = get_parameter(params_file, "CLIENT_ID")
+    set_parameter(params_file, "CLIENT_ID", ns.client_id)
+if ns.password:
+    set_parameter(params_file, "PLONE_PWD", ns.password)
+parameters = get_parameter(params_file)
+if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
+    stop("CLIENT_ID or PLONE_PWD not found in parameters")
 try:
     if ns.startup:
-        handle_startup(bundle_dir, client_id)
+        handle_startup(bundle_dir, parameters)
     if ns.startup_remove:
-        handle_startup(bundle_dir, client_id, action="remove")
+        handle_startup(bundle_dir, parameters, action="remove")
     if ns.no_update:
         # remove bat file
         pass
     else:
-        check_for_updates(bundle_dir, client_id)
+        check_for_updates(bundle_dir, parameters)
 except Exception as ex:
-    send_log_message(f"General error in main script '{ex}'", client_id)
+    send_log_message(f"General error in main script '{ex}'", parameters)
 
 # will do something
 log.info(f"Current version is {get_current_version()}")

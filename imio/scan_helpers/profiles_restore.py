@@ -43,15 +43,15 @@ ns = parser.parse_args()
 log.info("Starting restore script")
 bundle_dir = get_bundle_dir()
 params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
-client_id = get_parameter(params_file, "CLIENT_ID")
+parameters = get_parameter(params_file)
 try:
     main_backup_dir = get_main_backup_dir()
     dated_backup_dir = get_last_dated_backup_dir(main_backup_dir)
     if not dated_backup_dir:
-        stop(f"No dated backup dir in  '{main_backup_dir}'", client_id=client_id)
+        stop(f"No dated backup dir in  '{main_backup_dir}'", params=parameters)
     prof_dirs = read_dir(dated_backup_dir, with_path=False, only_folders=True)
     if not prof_dirs:
-        stop(f"No profiles found in '{dated_backup_dir}'", client_id=client_id)
+        stop(f"No profiles found in '{dated_backup_dir}'", params=parameters)
     main_prof_dir = get_scan_profiles_dir()
     for prof_dir in prof_dirs:
         adir = os.path.join(main_prof_dir, prof_dir)
@@ -59,7 +59,7 @@ try:
             shutil.rmtree(adir)
     copy_sub_files(dated_backup_dir, main_prof_dir, files=prof_dirs)
 except Exception as ex:
-    send_log_message(f"General error in profiles-restore script '{ex}'", client_id)
+    send_log_message(f"General error in profiles-restore script '{ex}'", parameters)
 
 log.info("Finished restore script")
 close_logger()
