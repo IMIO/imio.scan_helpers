@@ -18,7 +18,6 @@
 #
 from config import get_bundle_dir
 from config import PARAMS_FILE_NAME
-from datetime import datetime
 from logger import close_logger
 from logger import log
 from utils import copy_sub_files

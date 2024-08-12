@@ -3,8 +3,8 @@
 # logger.pyc is well directly in _internal/
 from config import get_bundle_dir
 
-import os
 import logging
+import os
 import sys
 
 
@@ -15,10 +15,10 @@ log = logging.getLogger()
 log.setLevel(LOGGER_LEVEL)
 console_handler = logging.StreamHandler(sys.stdout)
 console_handler.setLevel(LOGGER_LEVEL)
-file_handler = logging.FileHandler(os.path.join(get_bundle_dir(), 'ish.log'))
+file_handler = logging.FileHandler(os.path.join(get_bundle_dir(), "ish.log"))
 file_handler.setLevel(LOGGER_LEVEL)
 # formatter = logging.Formatter('%(asctime)s %(levelname).1s (%(name)s) %(message)s')
-formatter = logging.Formatter('%(asctime)s %(levelname).1s %(message)s')
+formatter = logging.Formatter("%(asctime)s %(levelname).1s %(message)s")
 formatter.datefmt = "%y%m%d %H%M%S"
 console_handler.setFormatter(formatter)
 file_handler.setFormatter(formatter)

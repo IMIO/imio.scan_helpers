@@ -34,7 +34,6 @@ from utils import unzip_file
 
 import argparse
 import os
-import sys
 
 
 def handle_startup(main_dir, clientid, action="add"):
@@ -44,11 +43,12 @@ def handle_startup(main_dir, clientid, action="add"):
     value_name = "IMIO_Scan_Helpers_Scripts"
     try:
         import winreg
+
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER, key, 0, winreg.KEY_SET_VALUE) as reg_key:
-            if action == 'add':
+            if action == "add":
                 winreg.SetValueEx(reg_key, value_name, 0, winreg.REG_SZ, exe_path)
                 log.info(f"'{exe_path}' added to startup")
-            elif action == 'remove':
+            elif action == "remove":
                 winreg.DeleteValue(reg_key, value_name)
                 log.info(f"'{exe_path}' removed from startup")
     except ImportError as e:

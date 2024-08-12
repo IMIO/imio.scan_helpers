@@ -56,24 +56,24 @@ def copy_release_files_and_restart(src_dir, dest_dir):
     exe_path = os.path.join(dest_dir, f"{MAIN_EXE_NAME}.exe")
     script_path = os.path.join(dest_dir, COPY_BAT_NAME)
 
-    with open(script_path, 'w') as script:
-        script.write(f'@echo off\n')
+    with open(script_path, "w") as script:
+        script.write(f"@echo off\n")
         script.write(f'echo Copying "{src_dir}" files to "{dest_dir}""\n')
-        script.write(f'timeout /t 3\n')  # waits for main script to end
+        script.write(f"timeout /t 3\n")  # waits for main script to end
         script.write(f'xcopy /s /e /h /r /y /q "{src_dir}\\*" "{dest_dir}"\n')
         script.write(f'start "" "{exe_path}" -nu\n')
         script.write(f'rmdir /s /q "{src_dir}"\n')
         # script.write(f'del "{script_path}"\n')
 
     if IS_PROD:
-        subprocess.Popen(['cmd', '/c', script_path])
+        subprocess.Popen(["cmd", "/c", script_path])
 
 
 def download_update(url, download_path):
     """Download github zip file"""
     response = requests.get(url, stream=True)
     response.raise_for_status()
-    with open(download_path, 'wb') as file:
+    with open(download_path, "wb") as file:
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)
 
@@ -95,7 +95,7 @@ def get_download_dir_path():
 def get_last_dated_backup_dir(backup_dir):
     """Get last dated backup dir"""
     subdirs = read_dir(backup_dir, with_path=False, only_folders=True)
-    subdirs = [adir for adir in subdirs if re.match(r'^\d{4}-\d{2}-\d{2}$', adir)]
+    subdirs = [adir for adir in subdirs if re.match(r"^\d{4}-\d{2}-\d{2}$", adir)]
     if subdirs:
         subdirs.sort(reverse=True)
         return os.path.join(backup_dir, subdirs[0])
@@ -173,13 +173,10 @@ def read_dir(dirpath, with_path=False, only_folders=False, only_files=False, to_
 
 
 def send_log_message(message, client_id, log_method=log.error):
-    data = {
-        'client_id': client_id,
-        'message': message
-    }
+    data = {"client_id": client_id, "message": message}
     if log_method:
         log_method(message)
-    headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
     response = requests.post(SERVER_URL, headers=headers, data=json.dumps(data))
     if response.status_code != 200:
         log.error(f"Failed to send log message: {response.text}")
@@ -198,7 +195,7 @@ def stop(msg="", intup=True, clientid=None):
 
 def store_client_id(params_file, client_id):
     """Store client_id in file"""
-    if not re.match(r'^0\d{5}$', client_id):
+    if not re.match(r"^0\d{5}$", client_id):
         stop(f"Given client_id '{client_id}' not well formed !")
     dic = get_parameter(params_file)
     if "CLIENT_ID" not in dic:
@@ -209,6 +206,6 @@ def store_client_id(params_file, client_id):
 
 def unzip_file(zip_path, extract_to):
     """Unzip downloaded archive and delete it"""
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
         zip_ref.extractall(extract_to)
     os.remove(zip_path)
