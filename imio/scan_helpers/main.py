@@ -61,7 +61,7 @@ def check_for_updates(main_dir, clientid):
     """Check for updates"""
     current_version = get_current_version()
     latest_version, download_url = get_latest_release_version(clientid, ns.release)
-    if latest_version > current_version:
+    if latest_version > current_version or ns.release:
         log.info(f"New version available: {latest_version}")
         download_dir_path = get_download_dir_path()
         if not os.path.exists(download_dir_path):
