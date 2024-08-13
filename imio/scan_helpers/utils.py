@@ -177,7 +177,9 @@ def send_log_message(message, params, log_method=log.error):
     if log_method:
         log_method(message)
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
-    response = requests.post(SERVER_URL, headers=headers, data=json.dumps(data), auth=("loguser", params["PLONE_PWD"]))
+    response = requests.post(
+        params["SERVER_URL"], headers=headers, data=json.dumps(data), auth=("loguser", params["PLONE_PWD"])
+    )
     if response.status_code != 200:
         log.error(f"Failed to send log message: {response.text}")
 
@@ -191,6 +193,7 @@ def set_parameter(params_file, key, value):
         dic[key] = value
         with open(params_file, "w") as pf:
             json.dump(dic, pf)
+    return dic
 
 
 def stop(msg="", intup=True, params=None):

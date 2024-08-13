@@ -20,6 +20,7 @@ from config import get_bundle_dir
 from config import get_current_version
 from config import MAIN_EXE_NAME
 from config import PARAMS_FILE_NAME
+from config import SERVER_URL
 from logger import close_logger
 from logger import log
 from utils import copy_release_files_and_restart
@@ -100,6 +101,8 @@ if ns.password:
 parameters = get_parameter(params_file)
 if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
     stop("CLIENT_ID or PLONE_PWD not found in parameters")
+if "SERVER_URL" not in parameters:
+    parameters = set_parameter("SERVER_URL", SERVER_URL)
 try:
     if ns.startup:
         handle_startup(bundle_dir, parameters)
