@@ -1,11 +1,13 @@
 Changelog
 =========
 
-0.2.1 (unreleased)
+0.2.1 (2024-08-13)
 ------------------
 
-- Nothing changed yet.
-
+- Changed backup directory.
+  [sgeulette]
+- Improved exception logging.
+  [sgeulette]
 
 0.2.0 (2024-08-13)
 ------------------
