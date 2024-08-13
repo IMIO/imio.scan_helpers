@@ -6,7 +6,7 @@ Changelog
 
 - Added profiles_backup script.
   [sgeulette]
-- Stored client identification in configuration file
+- Stored client identification, plone password and webservice url in configuration file.
   [sgeulette]
 - Added profiles_restore script.
   [sgeulette]
