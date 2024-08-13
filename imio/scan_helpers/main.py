@@ -115,5 +115,5 @@ except Exception as ex:
 
 # will do something
 log.info(f"Current version is {get_current_version()}")
-log.info("Nothing to do actually")
+
 close_logger()

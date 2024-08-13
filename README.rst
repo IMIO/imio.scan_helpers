@@ -26,6 +26,8 @@ Windows usage
 * imio-scan-helpers.exe -r tag_name: updates the software with specific release and restarts it
 * imio-scan-helpers.exe -c client_id: stores client_id in configuration file
   (used as identification when sending info to imio)
+* imio-scan-helpers.exe -p plone_password: stores webservice password in configuration file
+  (used when sending info to imio)
 * imio-scan-helpers.exe -nu : runs without update
 * imio-scan-helpers.exe --startup : adds the software to the windows startup
 * imio-scan-helpers.exe --startup-remove : removes the software from the windows startup

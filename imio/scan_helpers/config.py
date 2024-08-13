@@ -25,8 +25,8 @@ SERVER_URL = "https://scan-logger.imio-app.be/@message-receiver"
 
 
 if platform.system() == "Windows":
-    PROFILES_DIRS = [os.path.join("C:", path) for path in PROFILES_DIRS]
-    MAIN_BACKUP_DIR = os.path.join("C:", MAIN_BACKUP_DIR)
+    PROFILES_DIRS = [os.path.join("C:\\", path) for path in PROFILES_DIRS]
+    MAIN_BACKUP_DIR = os.path.join("C:\\", MAIN_BACKUP_DIR)
 else:
     PROFILES_DIRS = [os.path.join("test_env", path) for path in PROFILES_DIRS]
     MAIN_BACKUP_DIR = os.path.join("test_env", MAIN_BACKUP_DIR)

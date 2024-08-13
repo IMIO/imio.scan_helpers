@@ -18,6 +18,7 @@
 #
 from config import get_bundle_dir
 from config import PARAMS_FILE_NAME
+from config import PROFILES_DIRS
 from logger import close_logger
 from logger import log
 from utils import copy_sub_files
@@ -53,6 +54,8 @@ try:
     if not prof_dirs:
         stop(f"No profiles found in '{dated_backup_dir}'", params=parameters)
     main_prof_dir = get_scan_profiles_dir()
+    if not os.path.exists(main_prof_dir):
+        stop(f"Profiles dir not found: {PROFILES_DIRS}", params=parameters)
     for prof_dir in prof_dirs:
         adir = os.path.join(main_prof_dir, prof_dir)
         if os.path.exists(adir):

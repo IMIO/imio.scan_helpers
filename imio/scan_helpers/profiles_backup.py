@@ -18,6 +18,7 @@
 #
 from config import get_bundle_dir
 from config import PARAMS_FILE_NAME
+from config import PROFILES_DIRS
 from datetime import datetime
 from logger import close_logger
 from logger import log
@@ -46,6 +47,8 @@ params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
 parameters = get_parameter(params_file)
 try:
     main_prof_dir = get_scan_profiles_dir()
+    if not os.path.exists(main_prof_dir):
+        stop(f"Profiles dir not found: {PROFILES_DIRS}", params=parameters)
     prof_dirs = read_dir(main_prof_dir, with_path=False, only_folders=True)
     if not prof_dirs:
         stop(f"No profiles found in '{main_prof_dir}'", params=parameters)
