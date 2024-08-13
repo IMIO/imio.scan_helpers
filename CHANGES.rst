@@ -1,11 +1,11 @@
 Changelog
 =========
 
-0.2.2 (unreleased)
+0.2.2 (2024-08-13)
 ------------------
 
-- Nothing changed yet.
-
+- Added `--is-auto-started` parameter in main, passed when app is auto started.
+  [sgeulette]
 
 0.2.1 (2024-08-13)
 ------------------
