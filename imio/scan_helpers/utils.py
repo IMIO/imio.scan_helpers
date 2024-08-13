@@ -34,6 +34,7 @@ import requests
 import shutil
 import subprocess
 import sys
+import traceback
 import zipfile
 
 
@@ -76,6 +77,13 @@ def download_update(url, download_path):
     with open(download_path, "wb") as file:
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)
+
+
+def exception_infos(ex):
+    """Get exception infos"""
+    tb_list = traceback.extract_tb(ex.__traceback__)
+    filename, line_number, func_name, text = tb_list[-1]
+    return f"in {filename} at line {line_number}: '{ex}'"
 
 
 def get_dated_backup_dir(backup_dir, day):

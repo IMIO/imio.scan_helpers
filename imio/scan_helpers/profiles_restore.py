@@ -22,6 +22,7 @@ from config import PROFILES_DIRS
 from logger import close_logger
 from logger import log
 from utils import copy_sub_files
+from utils import exception_infos
 from utils import get_last_dated_backup_dir
 from utils import get_main_backup_dir
 from utils import get_parameter
@@ -62,7 +63,7 @@ try:
             shutil.rmtree(adir)
     copy_sub_files(dated_backup_dir, main_prof_dir, files=prof_dirs)
 except Exception as ex:
-    send_log_message(f"General error in profiles-restore script '{ex}'", parameters)
+    send_log_message(f"General error in profiles-restore script, {exception_infos(ex)}", parameters)
 
 log.info("Finished restore script")
 close_logger()

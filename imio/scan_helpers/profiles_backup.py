@@ -23,6 +23,7 @@ from datetime import datetime
 from logger import close_logger
 from logger import log
 from utils import copy_sub_files
+from utils import exception_infos
 from utils import get_dated_backup_dir
 from utils import get_main_backup_dir
 from utils import get_parameter
@@ -57,7 +58,7 @@ try:
     dated_backup_dir = get_dated_backup_dir(main_backup_dir, day=day)
     copy_sub_files(main_prof_dir, dated_backup_dir, files=prof_dirs)
 except Exception as ex:
-    send_log_message(f"General error in profiles-backup script '{ex}'", parameters)
+    send_log_message(f"General error in profiles-backup script, {exception_infos(ex)}", parameters)
 
 log.info("Finished backup script")
 close_logger()

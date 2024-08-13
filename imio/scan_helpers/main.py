@@ -25,6 +25,7 @@ from logger import close_logger
 from logger import log
 from utils import copy_release_files_and_restart
 from utils import download_update
+from utils import exception_infos
 from utils import get_download_dir_path
 from utils import get_latest_release_version
 from utils import get_parameter
@@ -55,7 +56,7 @@ def handle_startup(main_dir, params, action="add"):
     except ImportError as e:
         send_log_message("Cannot import winreg: add to startup failed !!", params)
     except Exception as e:
-        send_log_message(f"Error in handle_startup : {e}", params)
+        send_log_message(f"Error in handle_startup, {exception_infos(e)}", params)
 
 
 def check_for_updates(main_dir, params):
@@ -104,6 +105,7 @@ if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
 if "SERVER_URL" not in parameters:
     parameters = set_parameter(params_file, "SERVER_URL", SERVER_URL)
 try:
+    erreur_plus_détaillée
     if ns.startup:
         handle_startup(bundle_dir, parameters)
     if ns.startup_remove:
@@ -114,7 +116,7 @@ try:
     else:
         check_for_updates(bundle_dir, parameters)
 except Exception as ex:
-    send_log_message(f"General error in main script '{ex}'", parameters)
+    send_log_message(f"General error in main script, {exception_infos(ex)}", parameters)
 
 # will do something
 log.info(f"Current version is {get_current_version()}")
