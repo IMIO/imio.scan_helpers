@@ -134,14 +134,14 @@ def get_main_backup_dir():
     return MAIN_BACKUP_DIR
 
 
-def get_parameter(params_file, param=None):
+def get_parameter(params_file, param=None, default=None):
     """Get a specific parameter or the full dic"""
     dic = {}
     if os.path.exists(params_file):
         with open(params_file) as pf:
             dic = json.load(pf)
     if param:
-        return dic.get(param)
+        return dic.get(param, default)
     else:
         return dic
 

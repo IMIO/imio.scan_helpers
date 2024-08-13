@@ -48,8 +48,8 @@ def handle_startup(main_dir, params, action="add"):
 
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER, key, 0, winreg.KEY_SET_VALUE) as reg_key:
             if action == "add":
-                winreg.SetValueEx(reg_key, value_name, 0, winreg.REG_SZ, exe_path)
-                log.info(f"'{exe_path}' added to startup")
+                winreg.SetValueEx(reg_key, value_name, 0, winreg.REG_SZ, f'"{exe_path}" --is-auto-started')
+                log.info(f"'{exe_path} --is-auto-started' added to startup")
             elif action == "remove":
                 winreg.DeleteValue(reg_key, value_name)
                 log.info(f"'{exe_path}' removed from startup")
@@ -87,6 +87,9 @@ parser.add_argument("-nu", "--no-update", action="store_true", dest="no_update",
 parser.add_argument("-r", "--release", dest="release", help="Get this release")
 parser.add_argument("--startup", action="store_true", dest="startup", help="Add exe to startup")
 parser.add_argument("--startup-remove", action="store_true", dest="startup_remove", help="Remove exe from startup")
+parser.add_argument(
+    "--is-auto-started", action="store_true", dest="auto_started", help="Flag when script is auto started"
+)
 ns = parser.parse_args()
 
 if ns.version:
@@ -119,5 +122,7 @@ except Exception as ex:
 
 # will do something
 log.info(f"Current version is {get_current_version()}")
-
+if ns.auto_started and not get_parameter(params_file, "various"):
+    send_log_message("Script started automatically", parameters)
+    set_parameter(params_file, "various", "auto_started")
 close_logger()
