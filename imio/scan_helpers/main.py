@@ -105,7 +105,6 @@ if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
 if "SERVER_URL" not in parameters:
     parameters = set_parameter(params_file, "SERVER_URL", SERVER_URL)
 try:
-    erreur_plus_détaillée
     if ns.startup:
         handle_startup(bundle_dir, parameters)
     if ns.startup_remove:
