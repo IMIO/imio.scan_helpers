@@ -44,7 +44,7 @@ def copy_sub_files(src_dir, dest_dir, files=[]):
             continue
         s = os.path.join(src_dir, item)
         d = os.path.join(dest_dir, item)
-        log.info(f"Copying {s} to {dest_dir}")
+        log.info(f'Copying "{s}" to "{dest_dir}"')
         if os.path.isdir(s):
             if os.path.exists(d):
                 shutil.rmtree(d)

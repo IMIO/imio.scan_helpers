@@ -4,8 +4,8 @@ Changelog
 0.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Called profiles_restore in main.
+  [sgeulette]
 
 0.2.4 (2024-08-14)
 ------------------
