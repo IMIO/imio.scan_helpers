@@ -36,6 +36,7 @@ from utils import unzip_file
 
 import argparse
 import os
+import platform
 
 
 def handle_startup(main_dir, params, action="add"):
@@ -102,7 +103,7 @@ if ns.client_id:
     set_parameter(params_file, "CLIENT_ID", ns.client_id)
 if ns.password:
     set_parameter(params_file, "PLONE_PWD", ns.password)
-parameters = get_parameter(params_file)
+parameters = set_parameter(params_file, "hostname", platform.node())
 if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
     stop("CLIENT_ID or PLONE_PWD not found in parameters")
 if "SERVER_URL" not in parameters:
@@ -137,5 +138,5 @@ log.info(f"Current version is {get_current_version()}")
 if ns.auto_started and not get_parameter(params_file, "various"):
     send_log_message("Script started automatically", parameters, log_method=log.info)
     set_parameter(params_file, "various", "auto_started")
-
+# send_log_message("Test message", parameters, log_method=log.info)
 close_logger()

@@ -4,8 +4,8 @@ Changelog
 0.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Corrected set_parameter. Added hostname information.
+  [sgeulette]
 
 0.2.3 (2024-08-14)
 ------------------

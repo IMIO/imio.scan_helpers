@@ -190,7 +190,7 @@ def send_log_message(message, params, log_method=log.error, level="ERROR"):
     :param log_method: The log method to use
     :param level: The log level to include: ERROR or INFO
     """
-    data = {"client_id": params["CLIENT_ID"], "message": message, "level": level}
+    data = {"client_id": params["CLIENT_ID"], "hostname": params["hostname"], "message": message, "level": level}
     if log_method:
         log_method(message)
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
@@ -206,10 +206,9 @@ def set_parameter(params_file, key, value):
     if key == "CLIENT_ID" and not re.match(r"^0\d{5}$", value):
         stop(f"Given client_id '{value}' not well formed !")
     dic = get_parameter(params_file)
-    if key not in dic:
-        dic[key] = value
-        with open(params_file, "w") as pf:
-            json.dump(dic, pf)
+    dic[key] = value
+    with open(params_file, "w") as pf:
+        json.dump(dic, pf)
     return dic
 
 
