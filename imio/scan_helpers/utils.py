@@ -23,7 +23,6 @@ from config import IS_PROD
 from config import MAIN_BACKUP_DIR
 from config import MAIN_EXE_NAME
 from config import PROFILES_DIRS
-from config import SERVER_URL
 from logger import close_logger
 from logger import log
 
@@ -204,7 +203,14 @@ def set_parameter(params_file, key, value):
     return dic
 
 
-def stop(msg="", intup=True, params=None):
+def stop(msg="", intup=True, params=None, exit_code=1):
+    """Stop the script and log the message.
+
+    :param msg: The message to log
+    :param intup: Flag to wait for input before closing
+    :param params: The parameters dic containing webservice info. If given the message is sent to the webservice
+    :param exit_code: The exit code to return
+    """
     if msg:
         log.error(msg)
         if params:
@@ -212,7 +218,7 @@ def stop(msg="", intup=True, params=None):
     if intup:
         input("Press Enter to exit...")
     close_logger()
-    sys.exit(0)
+    sys.exit(exit_code)
 
 
 def unzip_file(zip_path, extract_to):

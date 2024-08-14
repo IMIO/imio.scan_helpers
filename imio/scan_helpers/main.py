@@ -75,7 +75,7 @@ def check_for_updates(main_dir, params):
         unzip_file(download_path, download_dir_path)
         copy_release_files_and_restart(download_dir_path, main_dir)
         log.info("Will replace files and restart")
-        stop(intup=False)
+        stop(intup=False, exit_code=0)
 
 
 # Argument parsing
@@ -94,9 +94,10 @@ ns = parser.parse_args()
 
 if ns.version:
     print(f"imio.scan_helpers version {get_current_version()}")
-    stop(intup=False)
+    stop(intup=False, exit_code=0)
 bundle_dir = get_bundle_dir()
 log.info(f"dir={bundle_dir}")
+
 params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
 if ns.client_id:
     set_parameter(params_file, "CLIENT_ID", ns.client_id)
