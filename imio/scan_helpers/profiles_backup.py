@@ -57,6 +57,7 @@ try:
     day = datetime.now().strftime("%Y-%m-%d")
     dated_backup_dir = get_dated_backup_dir(main_backup_dir, day=day)
     copy_sub_files(main_prof_dir, dated_backup_dir, files=prof_dirs)
+    input("Press Enter to exit...")
 except Exception as ex:
     send_log_message(f"General error in profiles-backup script, {exception_infos(ex)}", parameters)
 

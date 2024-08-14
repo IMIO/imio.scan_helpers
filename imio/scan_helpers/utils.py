@@ -38,11 +38,13 @@ import zipfile
 
 
 def copy_sub_files(src_dir, dest_dir, files=[]):
+    """Copy content from src to dest"""
     for item in os.listdir(src_dir):
         if files and item not in files:
             continue
         s = os.path.join(src_dir, item)
         d = os.path.join(dest_dir, item)
+        log.info(f"Copying {s} to {dest_dir}")
         if os.path.isdir(s):
             if os.path.exists(d):
                 shutil.rmtree(d)
@@ -57,9 +59,9 @@ def copy_release_files_and_restart(src_dir, dest_dir):
     script_path = os.path.join(dest_dir, COPY_BAT_NAME)
 
     with open(script_path, "w") as script:
-        script.write(f"@echo off\n")
+        script.write("@echo off\n")
         script.write(f'echo Copying "{src_dir}" files to "{dest_dir}""\n')
-        script.write(f"timeout /t 3\n")  # waits for main script to end
+        script.write("timeout /t 3\n")  # waits for main script to end
         script.write(f'xcopy /s /e /h /r /y /q "{src_dir}\\*" "{dest_dir}"\n')
         script.write(f'start "" "{exe_path}" -nu\n')
         script.write(f'rmdir /s /q "{src_dir}"\n')
@@ -94,6 +96,7 @@ def get_dated_backup_dir(backup_dir, day):
 
 
 def get_download_dir_path():
+    """Get download dir path for new version zip files"""
     # maybe use tempdir
     # temp_dir = tempfile.gettempdir()
     return os.path.join(get_bundle_dir(), DOWNLOAD_DIR)

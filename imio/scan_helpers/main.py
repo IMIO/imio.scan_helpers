@@ -59,11 +59,10 @@ def handle_startup(main_dir, params, action="add"):
         send_log_message(f"Error in handle_startup, {exception_infos(e)}", params)
 
 
-def check_for_updates(main_dir, params):
+def check_for_updates(main_dir, cur_vers, params):
     """Check for updates"""
-    current_version = get_current_version()
     latest_version, download_url = get_latest_release_version(params, ns.release)
-    if latest_version > current_version or ns.release:
+    if latest_version > cur_vers or ns.release:
         log.info(f"New version available: {latest_version}")
         download_dir_path = get_download_dir_path()
         if not os.path.exists(download_dir_path):
@@ -108,6 +107,18 @@ if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
     stop("CLIENT_ID or PLONE_PWD not found in parameters")
 if "SERVER_URL" not in parameters:
     parameters = set_parameter(params_file, "SERVER_URL", SERVER_URL)
+current_version = get_current_version()
+if "version" not in parameters:
+    set_parameter(params_file, "version", current_version)
+if current_version != parameters["version"]:
+    send_log_message(
+        f"Product updated from {parameters['version']} to {current_version}",
+        parameters,
+        log_method=log.info,
+        level="INFO",
+    )
+    set_parameter(params_file, "version", current_version)
+
 try:
     if ns.startup:
         handle_startup(bundle_dir, parameters)
@@ -117,7 +128,7 @@ try:
         # remove bat file
         pass
     else:
-        check_for_updates(bundle_dir, parameters)
+        check_for_updates(bundle_dir, current_version, parameters)
 except Exception as ex:
     send_log_message(f"General error in main script, {exception_infos(ex)}", parameters)
 
