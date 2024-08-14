@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2.5 (unreleased)
+0.2.5 (2024-08-14)
 ------------------
 
 - Called profiles_restore in main.
