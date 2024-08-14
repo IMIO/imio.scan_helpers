@@ -124,6 +124,6 @@ except Exception as ex:
 # will do something
 log.info(f"Current version is {get_current_version()}")
 if ns.auto_started and not get_parameter(params_file, "various"):
-    send_log_message("Script started automatically", parameters)
+    send_log_message("Script started automatically", parameters, log_method=log.info)
     set_parameter(params_file, "various", "auto_started")
 close_logger()

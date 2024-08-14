@@ -179,8 +179,15 @@ def read_dir(dirpath, with_path=False, only_folders=False, only_files=False, to_
     return files
 
 
-def send_log_message(message, params, log_method=log.error):
-    data = {"client_id": params["CLIENT_ID"], "message": message}
+def send_log_message(message, params, log_method=log.error, level="ERROR"):
+    """Send log message to webservice.
+
+    :param message: The message to send
+    :param params: The parameters dic containing webservice info
+    :param log_method: The log method to use
+    :param level: The log level to include: ERROR or INFO
+    """
+    data = {"client_id": params["CLIENT_ID"], "message": message, "level": level}
     if log_method:
         log_method(message)
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
