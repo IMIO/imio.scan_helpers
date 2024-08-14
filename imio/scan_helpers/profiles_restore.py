@@ -36,34 +36,37 @@ import os
 import shutil
 
 
-# Argument parsing
-parser = argparse.ArgumentParser()
-# parser.add_argument("-v", "--version", action="store_true", dest="version", help="Show version")
-# parser.add_argument("-r", "--release", dest="release", help="Get this release")
-ns = parser.parse_args()
+def main():
+    log.info("Starting restore script")
+    bundle_dir = get_bundle_dir()
+    params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
+    parameters = get_parameter(params_file)
+    try:
+        main_backup_dir = get_main_backup_dir(create=False)
+        dated_backup_dir = get_last_dated_backup_dir(main_backup_dir)
+        if not dated_backup_dir:
+            stop(f"No dated backup dir in  '{main_backup_dir}'", params=parameters)
+        prof_dirs = read_dir(dated_backup_dir, with_path=False, only_folders=True)
+        if not prof_dirs:
+            stop(f"No profiles found in '{dated_backup_dir}'", params=parameters)
+        main_prof_dir = get_scan_profiles_dir()
+        if not os.path.exists(main_prof_dir):
+            stop(f"Profiles dir not found: {PROFILES_DIRS}", params=parameters)
+        for prof_dir in prof_dirs:
+            adir = os.path.join(main_prof_dir, prof_dir)
+            if os.path.exists(adir):
+                shutil.rmtree(adir)
+        copy_sub_files(dated_backup_dir, main_prof_dir, files=prof_dirs)
+    except Exception as ex:
+        send_log_message(f"General error in profiles-restore script, {exception_infos(ex)}", parameters)
 
-log.info("Starting restore script")
-bundle_dir = get_bundle_dir()
-params_file = os.path.join(bundle_dir, PARAMS_FILE_NAME)
-parameters = get_parameter(params_file)
-try:
-    main_backup_dir = get_main_backup_dir()
-    dated_backup_dir = get_last_dated_backup_dir(main_backup_dir)
-    if not dated_backup_dir:
-        stop(f"No dated backup dir in  '{main_backup_dir}'", params=parameters)
-    prof_dirs = read_dir(dated_backup_dir, with_path=False, only_folders=True)
-    if not prof_dirs:
-        stop(f"No profiles found in '{dated_backup_dir}'", params=parameters)
-    main_prof_dir = get_scan_profiles_dir()
-    if not os.path.exists(main_prof_dir):
-        stop(f"Profiles dir not found: {PROFILES_DIRS}", params=parameters)
-    for prof_dir in prof_dirs:
-        adir = os.path.join(main_prof_dir, prof_dir)
-        if os.path.exists(adir):
-            shutil.rmtree(adir)
-    copy_sub_files(dated_backup_dir, main_prof_dir, files=prof_dirs)
-except Exception as ex:
-    send_log_message(f"General error in profiles-restore script, {exception_infos(ex)}", parameters)
+    log.info("Finished restore script")
+    close_logger()
 
-log.info("Finished restore script")
-close_logger()
+
+if __name__ == "__main__":
+    # Argument parsing
+    parser = argparse.ArgumentParser()
+    nsp = parser.parse_args()
+    # main(nsp)
+    main()

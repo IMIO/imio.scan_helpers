@@ -23,11 +23,13 @@ from config import PARAMS_FILE_NAME
 from config import SERVER_URL
 from logger import close_logger
 from logger import log
+from profiles_restore import main as profiles_restore_main
 from utils import copy_release_files_and_restart
 from utils import download_update
 from utils import exception_infos
 from utils import get_download_dir_path
 from utils import get_latest_release_version
+from utils import get_main_backup_dir
 from utils import get_parameter
 from utils import send_log_message
 from utils import set_parameter
@@ -139,4 +141,6 @@ if ns.auto_started and not get_parameter(params_file, "various"):
     send_log_message("Script started automatically", parameters, log_method=log.info)
     set_parameter(params_file, "various", "auto_started")
 # send_log_message("Test message", parameters, log_method=log.info)
+if get_main_backup_dir(create=False):
+    profiles_restore_main()
 close_logger()

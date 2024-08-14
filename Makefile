@@ -15,6 +15,7 @@ setup:  ## Setups environment
 .PHONY: pyinstaller
 pyinstaller:  ## Builds the executable with pyinstaller
 	./bin/pyinstaller -y imio-scan-helpers.spec
+	if test -f configuration.json;then ln -s configuration.json dist/imio-scan-helpers;fi
 
 .PHONY: run
 run:  ## Runs locally the main script with opt options (make run opt='-r main-99')

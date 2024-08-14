@@ -129,10 +129,13 @@ def get_latest_release_version(params, release=None):
     return latest_release["tag_name"], latest_release["assets"][0]["browser_download_url"]
 
 
-def get_main_backup_dir():
+def get_main_backup_dir(create=True):
     """Get main backup dir"""
     if not os.path.exists(MAIN_BACKUP_DIR):
-        os.makedirs(MAIN_BACKUP_DIR)
+        if create:
+            os.makedirs(MAIN_BACKUP_DIR)
+        else:
+            return None
     return MAIN_BACKUP_DIR
 
 
