@@ -1,11 +1,11 @@
 Changelog
 =========
 
-0.2.3 (unreleased)
+0.2.3 (2024-08-14)
 ------------------
 
-- Nothing changed yet.
-
+- Send an info message (no mail) when the product is updated.
+  [sgeulette]
 
 0.2.2 (2024-08-13)
 ------------------
