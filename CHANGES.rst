@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2.4 (unreleased)
+0.2.4 (2024-08-14)
 ------------------
 
 - Corrected set_parameter. Added hostname information.
