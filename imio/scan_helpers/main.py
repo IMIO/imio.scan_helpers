@@ -109,7 +109,7 @@ if "SERVER_URL" not in parameters:
     parameters = set_parameter(params_file, "SERVER_URL", SERVER_URL)
 current_version = get_current_version()
 if "version" not in parameters:
-    set_parameter(params_file, "version", current_version)
+    parameters = set_parameter(params_file, "version", current_version)
 if current_version != parameters["version"]:
     send_log_message(
         f"Product updated from {parameters['version']} to {current_version}",
@@ -137,4 +137,5 @@ log.info(f"Current version is {get_current_version()}")
 if ns.auto_started and not get_parameter(params_file, "various"):
     send_log_message("Script started automatically", parameters, log_method=log.info)
     set_parameter(params_file, "various", "auto_started")
+
 close_logger()
