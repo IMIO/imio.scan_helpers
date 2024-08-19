@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+from unittest.mock import patch
 from utils import copy_release_files_and_restart
 from utils import copy_sub_files
 from utils import download_update
@@ -9,6 +11,7 @@ from utils import get_main_backup_dir
 from utils import get_parameter
 from utils import get_scan_profiles_dir
 from utils import read_dir
+from utils import send_log_message
 from utils import set_parameter
 
 import os
@@ -105,6 +108,21 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(
             read_dir(p("test_env/ProgramData/Kofax/Kofax Express 3.2/Jobs"), to_skip=["IMIO ENTRANT"]), ["IMIO SORTANT"]
         )
+
+    @patch("requests.api.post")
+    def test_send_log_message(self, mock_post):
+        params = {
+            "CLIENT_ID": "010001",
+            "hostname": "pc1",
+            "PLONE_PWD": "password",
+            "SERVER_URL": "http://example.com",
+        }
+        logs = []
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_post.return_value = mock_response
+        send_log_message("My message", params, log_method=logs.append, level="ERROR")
+        self.assertListEqual(logs, ["My message"])
 
 
 if __name__ == "__main__":
