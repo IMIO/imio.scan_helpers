@@ -10,6 +10,7 @@ lib/
 *.log
 .python-version
 pyvenv.cfg
+share/
 src/
 test_env/kofax_backup/*
 .vscode/

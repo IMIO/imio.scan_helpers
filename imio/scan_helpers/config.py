@@ -25,7 +25,7 @@ SCRIPT_PROFILES_RESTORE_NAME = "profiles-restore"
 SERVER_URL = "https://scan-logger.imio-app.be/@message-receiver"
 
 
-if platform.system() == "Windows":
+if platform.system() == "Windows" and os.getenv("GITHUB_ACTIONS") is None:
     PROFILES_DIRS = [os.path.join("C:\\", path) for path in PROFILES_DIRS]
     MAIN_BACKUP_DIR = os.path.join("C:\\", "imio", MAIN_BACKUP_DIR)
 else:
