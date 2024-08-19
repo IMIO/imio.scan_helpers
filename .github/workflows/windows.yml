@@ -38,6 +38,9 @@ jobs:
       run: |
         pip install pyinstaller==6.9.0
         pip install requests
+    - name: Run tests
+      run: |
+        python imio/scan_helpers/tests.py
     - name: Build exe
       run: |
         echo "release=${{ steps.release.outputs.RELEASE }}"

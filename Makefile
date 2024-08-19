@@ -21,6 +21,11 @@ pyinstaller:  ## Builds the executable with pyinstaller
 run:  ## Runs locally the main script with opt options (make run opt='-r main-99')
 	./bin/python imio/scan_helpers/main.py ${opt}
 
+.PHONY: tests
+tests:  ## Runs tests
+	# can be run by example with: make tests opt='-t "* response"' or opt='-i "RUN1"'  (or -e to exclude)
+	bin/python imio/scan_helpers/tests.py ${opt}
+
 .PHONY: cleanall
 cleanall:  ## Cleans all installed files
 	rm -fr bin build dist include lib

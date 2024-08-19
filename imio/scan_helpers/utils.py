@@ -37,7 +37,7 @@ import traceback
 import zipfile
 
 
-def copy_sub_files(src_dir, dest_dir, files=[]):
+def copy_sub_files(src_dir, dest_dir, files=()):
     """Copy content from src to dest"""
     for item in os.listdir(src_dir):
         if files and item not in files:
