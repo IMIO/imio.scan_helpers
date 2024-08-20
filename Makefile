@@ -23,7 +23,7 @@ run:  ## Runs locally the main script with opt options (make run opt='-r main-99
 
 .PHONY: tests
 tests:  ## Runs tests
-	# can be run by example with: make tests opt='-t "* response"' or opt='-i "RUN1"'  (or -e to exclude)
+	# can be run by example with: make tests opt='-k "test_copy"'
 	bin/python imio/scan_helpers/tests.py ${opt}
 
 .PHONY: cleanall
