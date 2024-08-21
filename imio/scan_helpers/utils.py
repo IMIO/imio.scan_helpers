@@ -164,9 +164,19 @@ def get_scan_profiles_dir():
 
 def json_request(url, params):
     """Simple json request"""
+    proxies = {}
+    if params.get("PROXY"):
+        for protocol in ["http", "https"]:
+            if params.get("PROXY_USER") and params.get("PROXY_PWD"):
+                proxies[protocol] = f"{params['PROXY_USER']}:{params['PROXY_PWD']}@{params['PROXY']}"
+            else:
+                proxies[protocol] = params["PROXY"]
     try:
-        response = requests.get(url)
+        response = requests.get(url, proxies=proxies)
         response.raise_for_status()
+    except requests.exceptions.ProxyError as err:
+        send_log_message(f"Cannot request '{url}' : '{err}' with proxies {proxies}", params)
+        return {}
     except Exception as err:
         send_log_message(f"Cannot request '{url}' : '{err}'", params)
         return {}

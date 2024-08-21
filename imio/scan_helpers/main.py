@@ -87,6 +87,9 @@ parser.add_argument("-c", "--client-id", dest="client_id", help="Set client id")
 parser.add_argument("-p", "--password", dest="password", help="Set password")
 parser.add_argument("-nu", "--no-update", action="store_true", dest="no_update", help="Do not check for updates")
 parser.add_argument("-r", "--release", dest="release", help="Get this release")
+parser.add_argument("--proxy", dest="proxy", help="Proxy url")
+parser.add_argument("--proxy-user", dest="proxy_user", help="Proxy user")
+parser.add_argument("--proxy-pwd", dest="proxy_pwd", help="Proxy password")
 parser.add_argument("--startup", action="store_true", dest="startup", help="Add exe to startup")
 parser.add_argument("--startup-remove", action="store_true", dest="startup_remove", help="Remove exe from startup")
 parser.add_argument(
@@ -105,6 +108,12 @@ if ns.client_id:
     set_parameter(params_file, "CLIENT_ID", ns.client_id)
 if ns.password:
     set_parameter(params_file, "PLONE_PWD", ns.password)
+if ns.proxy:
+    set_parameter(params_file, "PROXY", ns.proxy)
+if ns.proxy_user:
+    set_parameter(params_file, "PROXY_USER", ns.proxy_user)
+if ns.proxy_pwd:
+    set_parameter(params_file, "PROXY_PWD", ns.proxy_pwd)
 parameters = set_parameter(params_file, "hostname", platform.node())
 if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
     stop("CLIENT_ID or PLONE_PWD not found in parameters")
