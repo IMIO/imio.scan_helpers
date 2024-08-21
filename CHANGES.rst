@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.2 (unreleased)
+0.3.2 (2024-08-21)
 ------------------
 
 - Corrected `utils.json_request`.
