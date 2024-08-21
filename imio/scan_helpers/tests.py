@@ -74,6 +74,11 @@ class TestUtils(unittest.TestCase):
         tag_name, download_url = get_latest_release_version({})
         self.assertTrue(tag_name >= "0.3.0")
 
+    @patch("utils.json_request")
+    def test_get_latest_release_version_bad_request(self, mock_json_request):
+        mock_json_request.return_value = {}
+        self.assertTupleEqual((None, None), get_latest_release_version({}, release="0.2.5"))
+
     def test_get_main_backup_dir(self):
         self.assertEqual(get_main_backup_dir(create=False), p("test_env/kofax_backup"))
 

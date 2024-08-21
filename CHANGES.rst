@@ -4,8 +4,8 @@ Changelog
 0.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Corrected `utils.json_request`.
+  [sgeulette]
 
 0.3.1 (2024-08-20)
 ------------------

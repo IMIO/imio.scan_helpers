@@ -117,6 +117,8 @@ def get_latest_release_version(params, release=None):
     if release:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
         ret = json_request(url, params)
+        if not ret:
+            return None, None
         for dic in ret:
             if dic["tag_name"] == release:
                 url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/{dic['id']}"
@@ -126,6 +128,8 @@ def get_latest_release_version(params, release=None):
     else:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
     latest_release = json_request(url, params)
+    if not latest_release:
+        return None, None
     return latest_release["tag_name"], latest_release["assets"][0]["browser_download_url"]
 
 
@@ -165,6 +169,7 @@ def json_request(url, params):
         response.raise_for_status()
     except Exception as err:
         send_log_message(f"Cannot request '{url}' : '{err}'", params)
+        return {}
     return response.json()
 
 

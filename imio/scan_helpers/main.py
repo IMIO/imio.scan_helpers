@@ -65,7 +65,7 @@ def handle_startup(main_dir, params, action="add"):
 def check_for_updates(main_dir, cur_vers, params):
     """Check for updates"""
     latest_version, download_url = get_latest_release_version(params, ns.release)
-    if latest_version > cur_vers or ns.release:
+    if latest_version is not None and (latest_version > cur_vers or ns.release):
         log.info(f"New version available: {latest_version}")
         download_dir_path = get_download_dir_path()
         if not os.path.exists(download_dir_path):
