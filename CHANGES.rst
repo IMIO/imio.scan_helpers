@@ -4,8 +4,8 @@ Changelog
 0.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Added more info in first message.
+  [sgeulette]
 
 0.4.0 (2024-08-21)
 ------------------

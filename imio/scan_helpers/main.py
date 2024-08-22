@@ -147,7 +147,11 @@ except Exception as ex:
 # will do something
 log.info(f"Current version is {get_current_version()}")
 if ns.auto_started and not get_parameter(params_file, "various"):
-    send_log_message("Script started automatically", parameters, log_method=log.info)
+    send_log_message(
+        f"Script started automatically !\nInstalled in '{bundle_dir}'.\nParameters: {sorted(parameters.keys())}",
+        parameters,
+        log_method=log.info,
+    )
     set_parameter(params_file, "various", "auto_started")
 # send_log_message("Test message", parameters, log_method=log.info)
 if get_main_backup_dir(create=False):
