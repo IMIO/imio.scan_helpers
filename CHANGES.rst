@@ -4,8 +4,8 @@ Changelog
 0.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Added certifi pem file to be sure https certificates can be validated.
+  [sgeulette]
 
 0.4.1 (2024-08-22)
 ------------------

@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from config import CERT_FILE
 from config import COPY_BAT_NAME
 from config import DOWNLOAD_DIR
 from config import get_bundle_dir
@@ -172,7 +173,7 @@ def json_request(url, params):
             else:
                 proxies[protocol] = params["PROXY"]
     try:
-        response = requests.get(url, proxies=proxies, verify="_internal/certifi/cacert.pem")
+        response = requests.get(url, proxies=proxies, verify=CERT_FILE)
         response.raise_for_status()
     except requests.exceptions.ProxyError as err:
         send_log_message(f"Cannot request '{url}' : '{err}' with proxies {proxies}", params)

@@ -32,11 +32,13 @@ else:
     PROFILES_DIRS = [os.path.join("test_env", path) for path in PROFILES_DIRS]
     MAIN_BACKUP_DIR = os.path.join("test_env", MAIN_BACKUP_DIR)
 
+CERT_FILE = None
 BUNDLE_DIR = os.path.dirname(__file__)
 IS_PROD = False
 if os.path.basename(BUNDLE_DIR) == INTERNAL_DIR:
     BUNDLE_DIR = os.path.dirname(BUNDLE_DIR)
     IS_PROD = True
+    CERT_FILE = os.path.join("_internal", "certifi", "cacert.pem")
 
 
 def get_bundle_dir():
