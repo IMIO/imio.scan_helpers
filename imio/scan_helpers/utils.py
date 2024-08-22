@@ -172,7 +172,7 @@ def json_request(url, params):
             else:
                 proxies[protocol] = params["PROXY"]
     try:
-        response = requests.get(url, proxies=proxies)
+        response = requests.get(url, proxies=proxies, verify="_internal/certifi/cacert.pem")
         response.raise_for_status()
     except requests.exceptions.ProxyError as err:
         send_log_message(f"Cannot request '{url}' : '{err}' with proxies {proxies}", params)

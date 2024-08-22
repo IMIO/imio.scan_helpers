@@ -1,6 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
 import argparse
+import certifi
 import shutil
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--release", dest="release", help="release to include in generated zip file")
@@ -11,7 +13,7 @@ a0 = Analysis(
     ['imio/scan_helpers/main.py'],
     pathex=['.', 'imio/scan_helpers'],
     binaries=[],
-    datas=[("imio/scan_helpers/version.txt", ".")],
+    datas=[("imio/scan_helpers/version.txt", "."), (certifi.where(), "certifi")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
