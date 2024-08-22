@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.2 (unreleased)
+0.5.0 (2024-08-22)
 ------------------
 
 - Added certifi pem file to be sure https certificates can be validated.
