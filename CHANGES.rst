@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.1 (unreleased)
+0.4.1 (2024-08-22)
 ------------------
 
 - Added more info in first message.
