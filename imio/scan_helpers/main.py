@@ -148,7 +148,8 @@ except Exception as ex:
 log.info(f"Current version is {get_current_version()}")
 if ns.auto_started and not get_parameter(params_file, "various"):
     send_log_message(
-        f"Script started automatically !\nInstalled in '{bundle_dir}'.\nParameters: {sorted(parameters.keys())}",
+        f"Script started automatically !\nInstalled in '{bundle_dir}'.\n"
+        f"Version is {parameters['version']}\nParameters: {sorted(parameters.keys())}",
         parameters,
         log_method=log.info,
     )

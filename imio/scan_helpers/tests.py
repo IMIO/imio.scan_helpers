@@ -57,7 +57,7 @@ class TestUtils(unittest.TestCase):
         shutil.rmtree(p("test_env/kofax_backup/2000-01-01"))
 
     def test_get_download_dir_path(self):
-        self.assertTrue(get_download_dir_path().endswith(p("imio-scan-helpers/_downloads")))
+        self.assertTrue(get_download_dir_path().endswith(p("helpers/_downloads")))
 
     def test_get_last_dated_backup_dir(self):
         self.assertIsNone(get_last_dated_backup_dir(p("test_env/kofax_backup")))
