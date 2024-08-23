@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5.1 (unreleased)
+0.5.1 (2024-08-23)
 ------------------
 
 - Corrected bug with relative path.

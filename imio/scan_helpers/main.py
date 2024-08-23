@@ -157,7 +157,7 @@ if ns.auto_started and not get_parameter(params_file, "various"):
             back_dirs = read_dir(dated_backup_dir, with_path=False, only_folders=True)
     send_log_message(
         f"Script started automatically !\nInstalled in '{bundle_dir}'.\n"
-        f"Version is {parameters['version']}\nParameters: {sorted(parameters.keys())}"
+        f"Version is {parameters['version']}\nParameters: {sorted(parameters.keys())}\n"
         f"Backuped dirs: {back_dirs}",
         parameters,
         log_method=log.info,
