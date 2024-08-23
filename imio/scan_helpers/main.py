@@ -21,6 +21,7 @@ from config import get_current_version
 from config import MAIN_EXE_NAME
 from config import PARAMS_FILE_NAME
 from config import SERVER_URL
+from imio.scan_helpers.utils import get_last_dated_backup_dir
 from logger import close_logger
 from logger import log
 from profiles_restore import main as profiles_restore_main
@@ -31,6 +32,7 @@ from utils import get_download_dir_path
 from utils import get_latest_release_version
 from utils import get_main_backup_dir
 from utils import get_parameter
+from utils import read_dir
 from utils import send_log_message
 from utils import set_parameter
 from utils import stop
@@ -56,7 +58,7 @@ def handle_startup(main_dir, params, action="add"):
             elif action == "remove":
                 winreg.DeleteValue(reg_key, value_name)
                 log.info(f"'{exe_path}' removed from startup")
-    except ImportError as e:
+    except ImportError:
         send_log_message("Cannot import winreg: add to startup failed !!", params)
     except Exception as e:
         send_log_message(f"Error in handle_startup, {exception_infos(e)}", params)
@@ -146,10 +148,17 @@ except Exception as ex:
 
 # will do something
 log.info(f"Current version is {get_current_version()}")
+main_backup_dir = get_main_backup_dir(create=False)
 if ns.auto_started and not get_parameter(params_file, "various"):
+    back_dirs = []
+    if main_backup_dir:
+        dated_backup_dir = get_last_dated_backup_dir(main_backup_dir)
+        if dated_backup_dir:
+            back_dirs = read_dir(dated_backup_dir, with_path=False, only_folders=True)
     send_log_message(
         f"Script started automatically !\nInstalled in '{bundle_dir}'.\n"
-        f"Version is {parameters['version']}\nParameters: {sorted(parameters.keys())}",
+        f"Version is {parameters['version']}\nParameters: {sorted(parameters.keys())}"
+        f"Backuped dirs: {back_dirs}",
         parameters,
         log_method=log.info,
     )

@@ -6,6 +6,8 @@ Changelog
 
 - Corrected bug with relative path.
   [sgeulette]
+- Added backuped dirs in first message.
+  [sgeulette]
 
 0.5.0 (2024-08-22)
 ------------------
