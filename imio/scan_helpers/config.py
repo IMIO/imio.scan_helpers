@@ -38,7 +38,7 @@ IS_PROD = False
 if os.path.basename(BUNDLE_DIR) == INTERNAL_DIR:
     BUNDLE_DIR = os.path.dirname(BUNDLE_DIR)
     IS_PROD = True
-    CERT_FILE = os.path.join("_internal", "certifi", "cacert.pem")
+    CERT_FILE = os.path.join(BUNDLE_DIR, "_internal", "certifi", "cacert.pem")
 
 
 def get_bundle_dir():

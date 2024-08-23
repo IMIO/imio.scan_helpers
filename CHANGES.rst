@@ -4,8 +4,8 @@ Changelog
 0.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Corrected bug with relative path.
+  [sgeulette]
 
 0.5.0 (2024-08-22)
 ------------------
