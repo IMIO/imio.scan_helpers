@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5.2 (unreleased)
+0.5.2 (2024-08-26)
 ------------------
 
 - Added version in message sent to webservice.
