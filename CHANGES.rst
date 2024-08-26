@@ -4,8 +4,8 @@ Changelog
 0.5.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Added version in message sent to webservice.
+  [sgeulette]
 
 0.5.1 (2024-08-23)
 ------------------

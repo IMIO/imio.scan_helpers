@@ -21,7 +21,6 @@ from config import get_current_version
 from config import MAIN_EXE_NAME
 from config import PARAMS_FILE_NAME
 from config import SERVER_URL
-from imio.scan_helpers.utils import get_last_dated_backup_dir
 from logger import close_logger
 from logger import log
 from profiles_restore import main as profiles_restore_main
@@ -29,6 +28,7 @@ from utils import copy_release_files_and_restart
 from utils import download_update
 from utils import exception_infos
 from utils import get_download_dir_path
+from utils import get_last_dated_backup_dir
 from utils import get_latest_release_version
 from utils import get_main_backup_dir
 from utils import get_parameter

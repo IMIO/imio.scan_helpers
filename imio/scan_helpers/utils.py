@@ -209,7 +209,13 @@ def send_log_message(message, params, log_method=log.error, level="ERROR"):
     :param log_method: The log method to use
     :param level: The log level to include: ERROR or INFO
     """
-    data = {"client_id": params["CLIENT_ID"], "hostname": params["hostname"], "message": message, "level": level}
+    data = {
+        "client_id": params["CLIENT_ID"],
+        "hostname": params["hostname"],
+        "message": message,
+        "level": level,
+        "version": params.get("version"),
+    }
     if log_method:
         log_method(message)
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
