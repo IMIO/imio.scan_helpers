@@ -4,8 +4,8 @@ Changelog
 0.5.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Improved version update.
+  [sgeulette]
 
 0.5.2 (2024-08-26)
 ------------------

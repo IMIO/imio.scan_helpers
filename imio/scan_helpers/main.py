@@ -125,13 +125,14 @@ current_version = get_current_version()
 if "version" not in parameters:
     parameters = set_parameter(params_file, "version", current_version)
 if current_version != parameters["version"]:
+    old_version = parameters["version"]
+    parameters = set_parameter(params_file, "version", current_version)
     send_log_message(
-        f"Product updated from {parameters['version']} to {current_version}",
+        f"Product updated from {old_version} to {current_version}",
         parameters,
         log_method=log.info,
         level="INFO",
     )
-    set_parameter(params_file, "version", current_version)
 
 try:
     if ns.startup:
