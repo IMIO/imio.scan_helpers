@@ -166,7 +166,7 @@ if ns.auto_started and not get_parameter(params_file, "various"):
     set_parameter(params_file, "various", "auto_started")
 if ns.test_message:
     send_log_message(
-        "Test message\nInstalled in '{bundle_dir}'.\nVersion is {parameters['version']}",
+        f"Test message\nInstalled in '{bundle_dir}'.\nVersion is {parameters['version']}",
         parameters,
         log_method=log.info,
     )
