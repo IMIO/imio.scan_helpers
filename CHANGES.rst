@@ -6,6 +6,8 @@ Changelog
 
 - Improved version update.
   [sgeulette]
+- Added `-tm` parameter (test message).
+  [sgeulette]
 
 0.5.2 (2024-08-26)
 ------------------

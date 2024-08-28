@@ -89,6 +89,7 @@ parser.add_argument("-c", "--client-id", dest="client_id", help="Set client id")
 parser.add_argument("-p", "--password", dest="password", help="Set password")
 parser.add_argument("-nu", "--no-update", action="store_true", dest="no_update", help="Do not check for updates")
 parser.add_argument("-r", "--release", dest="release", help="Get this release")
+parser.add_argument("-tm", "--test-message", action="store_true", dest="test_message", help="Send a test message")
 parser.add_argument("--proxy", dest="proxy", help="Proxy url")
 parser.add_argument("--proxy-user", dest="proxy_user", help="Proxy user")
 parser.add_argument("--proxy-pwd", dest="proxy_pwd", help="Proxy password")
@@ -164,7 +165,12 @@ if ns.auto_started and not get_parameter(params_file, "various"):
         log_method=log.info,
     )
     set_parameter(params_file, "various", "auto_started")
-# send_log_message("Test message", parameters, log_method=log.info)
+if ns.test_message:
+    send_log_message(
+        "Test message\nInstalled in '{bundle_dir}'.\nVersion is {parameters['version']}",
+        parameters,
+        log_method=log.info,
+    )
 if get_main_backup_dir(create=False):
     profiles_restore_main()
 close_logger()
