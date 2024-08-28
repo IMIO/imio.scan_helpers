@@ -140,8 +140,7 @@ try:
         handle_startup(bundle_dir, parameters)
     if ns.startup_remove:
         handle_startup(bundle_dir, parameters, action="remove")
-    if ns.no_update:
-        # remove bat file
+    if ns.no_update or ns.test_message:
         pass
     else:
         check_for_updates(bundle_dir, current_version, parameters)
@@ -171,6 +170,6 @@ if ns.test_message:
         parameters,
         log_method=log.info,
     )
-if get_main_backup_dir(create=False):
+elif get_main_backup_dir(create=False):
     profiles_restore_main()
 close_logger()
