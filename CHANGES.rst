@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5.3 (unreleased)
+0.6.0 (2024-08-28)
 ------------------
 
 - Improved version update.
