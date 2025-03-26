@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from config import CERT_FILE
 from config import COPY_BAT_NAME
 from config import DOWNLOAD_DIR
 from config import get_bundle_dir
@@ -173,7 +172,7 @@ def json_request(url, params):
             else:
                 proxies[protocol] = params["PROXY"]
     try:
-        response = requests.get(url, proxies=proxies, verify=CERT_FILE)
+        response = requests.get(url, proxies=proxies)
         response.raise_for_status()
     except requests.exceptions.ProxyError as err:
         send_log_message(f"Cannot request '{url}' : '{err}' with proxies {proxies}", params)
@@ -224,7 +223,6 @@ def send_log_message(message, params, log_method=log.error, level="ERROR"):
         headers=headers,
         data=json.dumps(data),
         auth=("loguser", params["PLONE_PWD"]),
-        verify=CERT_FILE,
     )
     if response.status_code != 200:
         log.error(f"Failed to send log message: {response.text}")
