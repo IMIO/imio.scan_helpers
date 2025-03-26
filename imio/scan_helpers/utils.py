@@ -220,7 +220,11 @@ def send_log_message(message, params, log_method=log.error, level="ERROR"):
         log_method(message)
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     response = requests.post(
-        params["SERVER_URL"], headers=headers, data=json.dumps(data), auth=("loguser", params["PLONE_PWD"])
+        params["SERVER_URL"],
+        headers=headers,
+        data=json.dumps(data),
+        auth=("loguser", params["PLONE_PWD"]),
+        verify=CERT_FILE,
     )
     if response.status_code != 200:
         log.error(f"Failed to send log message: {response.text}")
