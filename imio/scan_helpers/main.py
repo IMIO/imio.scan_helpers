@@ -40,7 +40,7 @@ from utils import unzip_file
 
 import argparse
 import os
-import pip_system_certs.wrapt_requests  # This enable the cert handling in requests/pip/et
+import pip_system_certs.wrapt_requests  # This enable the cert handling in requests/pip/etc. This must be run before requests is imported.
 import platform
 
 
