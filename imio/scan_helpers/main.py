@@ -16,6 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+
+# This enable the cert handling in requests/pip/etc.
+# This must be run before requests is imported.
+import pip_system_certs.wrapt_requests  # isort: skip
+
 from config import get_bundle_dir
 from config import get_current_version
 from config import MAIN_EXE_NAME
@@ -40,7 +45,6 @@ from utils import unzip_file
 
 import argparse
 import os
-import pip_system_certs.wrapt_requests  # This enable the cert handling in requests/pip/etc. This must be run before requests is imported.
 import platform
 
 
