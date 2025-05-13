@@ -114,7 +114,7 @@ class TestUtils(unittest.TestCase):
             read_dir(p("test_env/ProgramData/Kofax/Kofax Express 3.2/Jobs"), to_skip=["IMIO ENTRANT"]), ["IMIO SORTANT"]
         )
 
-    @patch("requests.api.post")
+    @patch("requests.post")
     def test_send_log_message(self, mock_post):
         params = {
             "CLIENT_ID": "010001",
