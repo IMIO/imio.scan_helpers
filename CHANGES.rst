@@ -4,8 +4,10 @@ Changelog
 0.6.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Used `pip-system-certs` to resolve certificate problems.
+  [chris-adam]
+- Unpinned pyinstaller version.
+  [sgeulette]
 
 0.6.0 (2024-08-28)
 ------------------
