@@ -25,6 +25,9 @@ from config import MAIN_EXE_NAME
 from config import PROFILES_DIRS
 from logger import close_logger
 from logger import log
+from requests.exceptions import ConnectionError
+from requests.exceptions import RequestException
+from requests.exceptions import Timeout
 
 import json
 import os
@@ -207,6 +210,7 @@ def send_log_message(message, params, log_method=log.error, level="ERROR"):
     :param params: The parameters dic containing webservice info
     :param log_method: The log method to use
     :param level: The log level to include: ERROR or INFO
+    :return: True if the message was sent successfully, False otherwise
     """
     data = {
         "client_id": params["CLIENT_ID"],
@@ -218,14 +222,25 @@ def send_log_message(message, params, log_method=log.error, level="ERROR"):
     if log_method:
         log_method(message)
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
-    response = requests.post(
-        params["SERVER_URL"],
-        headers=headers,
-        data=json.dumps(data),
-        auth=("loguser", params["PLONE_PWD"]),
-    )
-    if response.status_code != 200:
-        log.error(f"Failed to send log message: {response.text}")
+    try:
+        response = requests.post(
+            params["SERVER_URL"],
+            headers=headers,
+            data=json.dumps(data),
+            auth=("loguser", params["PLONE_PWD"]),
+            timeout=30,  # time in seconds for connexion + read
+        )
+        response.raise_for_status()  # raises exception when status not 200
+        return True
+    except Timeout:
+        log_method("Timeout while sending log message to %s", params["SERVER_URL"])
+        return False
+    except ConnectionError:
+        log_method("Connection error while sending log message to %s", params["SERVER_URL"])
+        return False
+    except RequestException as e:
+        log_method("Failed to send log message to %s: %s", params["SERVER_URL"], str(e))
+        return False
 
 
 def set_parameter(params_file, key, value):

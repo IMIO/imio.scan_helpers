@@ -8,6 +8,8 @@ Changelog
   [chris-adam]
 - Unpinned pyinstaller version.
   [sgeulette]
+- Improved send_log_message to avoid timeout.
+  [sgeulette]
 
 0.6.0 (2024-08-28)
 ------------------
