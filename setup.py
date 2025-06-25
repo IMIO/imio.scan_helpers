@@ -22,13 +22,13 @@ setup(
     packages=find_packages(exclude=["ez_setup"]),
     classifiers=[
         "Development Status :: 3 - Alpha",
-        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: Microsoft :: Windows :: Windows 10",
         "Operating System :: Microsoft :: Windows :: Windows 11",
     ],
-    python_requires=">=3.11",
+    python_requires=">=3.12",
     install_requires=[
         "pyinstaller",
         "requests",
