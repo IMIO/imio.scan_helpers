@@ -55,8 +55,11 @@ def main():
         for prof_dir in prof_dirs:
             adir = os.path.join(main_prof_dir, prof_dir)
             if os.path.exists(adir):
-                shutil.rmtree(adir)
-        copy_sub_files(dated_backup_dir, main_prof_dir, files=prof_dirs)
+                try:
+                    shutil.rmtree(adir)
+                    copy_sub_files(dated_backup_dir, main_prof_dir, files=[prof_dir])
+                except Exception as ex:
+                    send_log_message(f"Error while removing existing dir '{adir}' in profiles-restore script: {exception_infos(ex)}", parameters)
     except Exception as ex:
         send_log_message(f"General error in profiles-restore script, {exception_infos(ex)}", parameters)
 

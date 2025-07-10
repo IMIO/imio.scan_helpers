@@ -10,6 +10,8 @@ Changelog
   [sgeulette]
 - Improved send_log_message to avoid timeout.
   [sgeulette]
+- Added exception handling when removing profiles directory.
+  [chris-adam]
 
 0.6.0 (2024-08-28)
 ------------------
