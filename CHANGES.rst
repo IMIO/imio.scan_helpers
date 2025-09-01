@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.7.0 (unreleased)
+0.7.0 (2025-09-01)
 ------------------
 
 - Used `pip-system-certs` to resolve certificate problems.
