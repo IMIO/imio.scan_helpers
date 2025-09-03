@@ -118,15 +118,24 @@ def get_last_dated_backup_dir(backup_dir):
 def get_latest_release_version(params, release=None):
     """Get GitHub latest or specified release info"""
     if release:
-        url = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
+        page = 1
+        url = f"https://api.github.com/repos/{GITHUB_REPO}/releases?page={page}"
         ret = json_request(url, params)
         if not ret:
             return None, None
-        for dic in ret:
-            if dic["tag_name"] == release:
-                url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/{dic['id']}"
-                break
-        else:
+        release_found = False
+        while ret and not release_found:
+            for dic in ret:
+                if dic["tag_name"] == release:
+                    url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/{dic['id']}"
+                    release_found = True
+                    break
+            else:
+                page += 1
+                url = f"https://api.github.com/repos/{GITHUB_REPO}/releases?page={page}"
+                ret = json_request(url, params)
+        if not release_found:
+            import ipdb; ipdb.set_trace()
             stop(f"The release with tag '{release}' cannot be found", params=params)
     else:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"

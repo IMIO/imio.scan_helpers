@@ -46,7 +46,8 @@ class TestUtils(unittest.TestCase):
         self.assertTrue(os.path.exists(p("test_env/download.txt")))
         with open(p("test_env/download.txt"), "r") as file:
             content = file.read()
-            self.assertIn("pip-system-certs\npyinstaller", content)
+            self.assertIn("pip-system-certs", content)
+            self.assertIn("pyinstaller", content)
         os.remove(p("test_env/download.txt"))
 
     def test_get_dated_backup_dir(self):

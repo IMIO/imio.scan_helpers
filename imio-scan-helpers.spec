@@ -1,6 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
 import argparse
-import certifi
 import shutil
 
 
@@ -13,7 +12,7 @@ a0 = Analysis(
     ['imio/scan_helpers/main.py'],
     pathex=['.', 'imio/scan_helpers'],
     binaries=[],
-    datas=[("imio/scan_helpers/version.txt", "."), (certifi.where(), "certifi")],
+    datas=[("imio/scan_helpers/version.txt", ".")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

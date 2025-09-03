@@ -4,7 +4,10 @@ Changelog
 0.7.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed pip-system-cert for inject_truststore() function.
+  [chris-adam]
+- Fixed get_latest_release_version to iterate over all GitHub pages.
+  [chris-adam]
 
 
 0.7.0 (2025-09-01)
