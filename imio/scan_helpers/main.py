@@ -104,6 +104,7 @@ parser.add_argument("--startup-remove", action="store_true", dest="startup_remov
 parser.add_argument(
     "--is-auto-started", action="store_true", dest="auto_started", help="Flag when script is auto started"
 )
+parser.add_argument("--no-auto-update", action="store_false", dest="auto_update", help="Prevent auto update check")
 ns = parser.parse_args()
 
 if ns.version:
@@ -123,6 +124,7 @@ if ns.proxy_user:
     set_parameter(params_file, "PROXY_USER", ns.proxy_user)
 if ns.proxy_pwd:
     set_parameter(params_file, "PROXY_PWD", ns.proxy_pwd)
+set_parameter(params_file, "auto_update", ns.auto_update)
 parameters = set_parameter(params_file, "hostname", platform.node())
 if "CLIENT_ID" not in parameters or "PLONE_PWD" not in parameters:
     stop("CLIENT_ID or PLONE_PWD not found in parameters")
@@ -148,7 +150,7 @@ try:
         handle_startup(bundle_dir, parameters, action="remove")
     if ns.no_update or ns.test_message:
         pass
-    else:
+    elif get_parameter(params_file, "auto_update", True):
         check_for_updates(bundle_dir, current_version, parameters)
 except Exception as ex:
     send_log_message(f"General error in main script, {exception_infos(ex)}", parameters)
