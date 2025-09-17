@@ -8,6 +8,8 @@ Changelog
   [chris-adam]
 - Fixed get_latest_release_version to iterate over all GitHub pages.
   [chris-adam]
+- Added parameter to prevent auto updates.
+  [chris-adam]
 
 
 0.7.0 (2025-09-01)
