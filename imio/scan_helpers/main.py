@@ -19,8 +19,7 @@
 
 # This enable the cert handling in requests/pip/etc.
 # This must be run before requests is imported.
-import pip_system_certs.wrapt_requests  # isort: skip
-pip_system_certs.wrapt_requests.inject_truststore()
+import truststore; truststore.inject_into_ssl()
 
 from config import get_bundle_dir
 from config import get_current_version
