@@ -10,6 +10,8 @@ Changelog
   [chris-adam]
 - Added parameter to prevent auto updates.
   [chris-adam]
+- Replaced pip-system-certs with truststore to resolve certificate problems.
+  [chris-adam]
 
 
 0.7.0 (2025-09-01)
