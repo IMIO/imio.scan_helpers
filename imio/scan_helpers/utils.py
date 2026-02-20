@@ -135,7 +135,6 @@ def get_latest_release_version(params, release=None):
                 url = f"https://api.github.com/repos/{GITHUB_REPO}/releases?page={page}"
                 ret = json_request(url, params)
         if not release_found:
-            import ipdb; ipdb.set_trace()
             stop(f"The release with tag '{release}' cannot be found", params=params)
     else:
         url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
