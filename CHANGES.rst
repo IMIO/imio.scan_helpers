@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.7.1 (unreleased)
+0.7.1 (2026-02-20)
 ------------------
 
 - Fixed pip-system-cert for inject_truststore() function.
